@@ -1,12 +1,12 @@
 export const getProductandWarehouses = async (companyId: number) => {
     const [productsResponse, warehousesResponse] = await Promise.all([
-        fetch("http://localhost:5290/api/LookUp/lookup-products", {
+        fetch("http://localhost:5153/api/LookUp/lookup-products", {
             headers: {
                 "x-company-id": companyId.toString(),
                 "Accept": "application/json",
             },
         }),
-        fetch("http://localhost:5290/api/LookUp/lookup-warehouses", {
+        fetch("http://localhost:5153/api/LookUp/lookup-warehouses", {
             headers: {
                 "x-company-id": companyId.toString(),
                 "Accept": "application/json",

@@ -4,7 +4,7 @@ export const makeAdjustment = async (companyId: number, adjustmentData: {
     quantity: number;
     reason: string;
 }) => {
-    const response = await fetch("http://localhost:5290/api/Adjustment", {
+    const response = await fetch("http://localhost:5153/api/Adjustment", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

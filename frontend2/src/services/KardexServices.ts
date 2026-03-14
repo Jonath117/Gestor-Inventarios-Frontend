@@ -31,7 +31,7 @@ devuelve una lista delos movimientos
  */
 
 export const getKardex = async (companyId: number, productId: number) => {
-    const response = await fetch(`http://localhost:5290/api/Kardex/${productId}`, {
+    const response = await fetch(`http://localhost:5153/api/Kardex/${productId}`, {
         headers: {
             "x-company-id": companyId.toString(),
             "Accept": "application/json",

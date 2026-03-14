@@ -1,6 +1,6 @@
 export const getDashboard = async (companyId: number) => {
     const response = await fetch(
-        "http://localhost:5290/api/inventory/dashboard",
+        "http://localhost:5153/api/inventory/dashboard",
         {
             headers: {
                 "x-company-id": companyId.toString(),
