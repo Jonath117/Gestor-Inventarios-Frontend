@@ -10,7 +10,6 @@
 
 export const getStock = async (companyId: number, warehouseId?: number) => {
     const url = warehouseId
-    //por que dos urls? 
         ? `http://localhost:5153/api/GetStock?warehouseId=${warehouseId}`
         : "http://localhost:5153/api/GetStock";
     

@@ -3,6 +3,7 @@ import { registerMovement } from "../../../services/MovementService";
 import { getProductandWarehouses } from "../../../services/DropDown"; 
 import type { MovementFormData } from "../types";
 
+
 export const MovementForm = () => {
     const [form, setForm] = useState<MovementFormData>({
         productId: "",
@@ -18,6 +19,8 @@ export const MovementForm = () => {
     
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState<{ text: string; type: "success" | "error" } | null>(null);
+
+
 
     const blockInvalidChars = (e: React.KeyboardEvent) => {
     if (["e", "E", ".", ","].includes(e.key)) {
@@ -85,12 +88,18 @@ export const MovementForm = () => {
                 
             
             setForm(prev => ({ ...prev, productId: "", quantity: "", reference: "", reason: "" }));
-        } catch (error) {
-            setMessage({ text: "Error al registrar el movimiento.", type: "error" });
+        } catch (error: any) {
+             error.message = error.message || "Stock Insuficiente. Verifica la cantidad disponible antes de registrar la salida.";
+                setMessage({ 
+                text: error.message, 
+                type: "error" 
+            });
+
         } finally {
             setLoading(false);
             }
     };
+
 
     
     const isIncome = form.movementType === "IN";
