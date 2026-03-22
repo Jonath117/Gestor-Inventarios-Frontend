@@ -9,7 +9,8 @@ import {
   ChevronDoubleLeftIcon,
   ChevronDoubleRightIcon,
   Squares2X2Icon, // Dashboard
-  ArchiveBoxIcon
+  ArchiveBoxIcon,
+  ClipboardIcon 
 
 } from "@heroicons/react/24/outline";
 import { useCompany } from "../../features/company/pages/CompanyContext.tsx";
@@ -21,6 +22,7 @@ const navigation = [
   { name: "Dashboard", href: "/dashboard", icon: Squares2X2Icon },
   { name: "Inventario", href: "/inventory", icon: ArchiveBoxIcon},
   {name: "Categorias", href: "/categories", icon: FolderIcon },
+  {name: "Productos", href: "/products", icon: ClipboardIcon },
   { name: "Kardex", href: "/kardex", icon: ChartPieIcon },
   {name: "Movimientos", href: "/in-out", icon: DocumentDuplicateIcon },
 ];
@@ -80,8 +82,8 @@ const SideBar = () => {
       {/* Empresa activa */}
       {!isCollapsed && (
         <div className="mx-2 mb-6 px-3 py-2 rounded-lg bg-[#1f2937] border border-[#374151]">
-          <p className="text-xs text-gray-500 mb-0.5">Empresa activa</p>
-          <p className="text-sm font-semibold text-white truncate">{selectedCompany.name}</p>
+          <p className="text-sm text-gray-500 mb-0.5">Empresa activa</p>
+          <p className="text-medium font-semibold text-white truncate">{selectedCompany.name}</p>
         </div>
       )}
 
@@ -94,7 +96,7 @@ const SideBar = () => {
             end={item.href === "/"}
             title={isCollapsed ? item.name : undefined}
             className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors duration-150
+              `flex items-center gap-3 px-3 py-2.5 rounded-lg text-medium font-medium transition-colors duration-150
               ${isCollapsed ? "justify-center" : ""}
               ${isActive ? "bg-[#1f2937] text-white" : "text-gray-400 hover:bg-[#1a2232] hover:text-white"}`
             }

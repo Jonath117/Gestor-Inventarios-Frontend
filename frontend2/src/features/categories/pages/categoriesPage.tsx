@@ -54,7 +54,7 @@ return (
                 {!isFormOpen && (
                     <button 
                         onClick={() => setIsFormOpen(true)} 
-                        className="bg-green-600 text-white px-4 py-2 rounded">
+                        className="bg-green-600 text-white px-4 py-2 rounded shadow hover:bg-green-700">
                         + Nueva Categoría
                     </button>
                 )}
@@ -70,23 +70,24 @@ return (
                     }} 
                 />
             ) : (
+            <div className="overflow-x-auto bg-[#111827] rounded-xl border border-[#1f2937]">
                 <table className="w-full text-left border-collapse">
-                    <thead>
-                        <tr className="border-b text-white">
-                            <th className="p-2">Nombre</th>
-                            <th className="p-2">Descripción</th>
-                            <th className="p-2">Acciones</th>
+                    <thead className="bg-[#1f2937] text-gray-400 uppercase text-medium tracking-wider">
+                        <tr className="border-b">
+                            <th className="p-3">Nombre</th>
+                            <th className="p-3 ">Descripción</th>
+                            <th className="p-3">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         {categories.map(cat => (
-                            <tr key={cat.id} className="border-b hover:bg-gray-800 text-white">
-                                <td className="p-2">{cat.name}</td>
-                                <td className="p-2">{cat.description}</td>
-                                <td className="p-2">
+                            <tr key={cat.id} className=" border-b hover:bg-gray-800">
+                                <td className="p-3 text-sm text-gray-100">{cat.name}</td>
+                                <td className="p-3 font-medium text-white">{cat.description}</td>
+                                <td className="p-3">
                                     <button 
                                         onClick={() => handleEdit(cat)} 
-                                        className="text-blue-600 underline">
+                                        className="text-blue-600 underline hover:text-white cursor-pointer px-2 py-1 rounded">
                                         Editar
                                     </button>
                                 </td>
@@ -94,6 +95,7 @@ return (
                         ))}
                     </tbody>
                 </table>
+            </div>
             )}
         </div>
     );

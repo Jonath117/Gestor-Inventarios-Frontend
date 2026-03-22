@@ -40,7 +40,7 @@ export const InventoryPage = () => {
     const lowStockCount = stock.filter((i) => i.currentStock <= i.minStockAlert).length;
 
     return (
-        <div className="min-h-screen bg-[#0d1117] px-8 py-8">
+        <div className="min-h-screen px-8 py-8">
             {/* Header */}
             <div className="flex items-center justify-between mb-8">
                 <div>
@@ -68,19 +68,18 @@ export const InventoryPage = () => {
                 <div className="flex gap-2 flex-wrap">
                     <button
                         onClick={() => setWarehouseFilter("")}
-                        className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                        className={`px-5 py-2 rounded-lg text-medium font-medium transition-colors ${
                             warehouseFilter === ""
                                 ? "bg-indigo-600 text-white"
                                 : "bg-[#1f2937] text-gray-400 hover:text-white"
                         }`}
-                    >
-                        Todas las bodegas
+                    > Todas las bodegas
                     </button>
                     {warehouses.map((w) => (
                         <button
                             key={w}
                             onClick={() => setWarehouseFilter(w)}
-                            className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                            className={`px-5 py-2 rounded-lg text-medium font-medium transition-colors ${
                                 warehouseFilter === w
                                     ? "bg-indigo-600 text-white"
                                     : "bg-[#1f2937] text-gray-400 hover:text-white"

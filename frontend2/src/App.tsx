@@ -9,6 +9,7 @@ import { ToastProvider } from './components/Toast.tsx';
 import { KardexPage } from './features/inventory-movements/pages/KardexPage.tsx';
 import { MovementPage } from './features/in-out/pages/MovementPage.tsx';
 import { CategoriesPage } from './features/categories/pages/categoriesPage.tsx';
+import { ProductsPage } from './features/product/pages/ProductsPage.tsx';
 
 function App() {
 
@@ -24,6 +25,7 @@ function App() {
             <Route path="/kardex" element={<KardexPage />} />
             <Route path="/in-out" element={<MovementPage />} />
             <Route path="/categories" element={<CategoriesPage/>} />
+            <Route path="/products" element={<ProductsPage/>} />
           </Route>
         </Routes>
       </ToastProvider>

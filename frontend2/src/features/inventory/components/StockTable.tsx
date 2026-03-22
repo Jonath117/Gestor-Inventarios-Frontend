@@ -15,7 +15,7 @@ export const StockTable = ({ items }: Props) => {
         <div className="overflow-x-auto rounded-xl border border-[#1f2937]">
             <table className="w-full text-sm">
                 <thead>
-                    <tr className="bg-[#0f172a] text-gray-400 uppercase text-xs tracking-wider">
+                    <tr className="bg-[#1f2937] text-gray-400 uppercase text-medium tracking-wider">
                         <th className="px-5 py-3 text-left">SKU</th>
                         <th className="px-5 py-3 text-left">Producto</th>
                         <th className="px-5 py-3 text-left">Bodega</th>
@@ -26,7 +26,7 @@ export const StockTable = ({ items }: Props) => {
                         <th className="px-5 py-3 text-center">Estado</th>
                     </tr>
                 </thead>
-                <tbody className="divide-y divide-[#1f2937]">
+                <tbody className="divide-y divide-[#111827]]">
                     {items.map((item, i) => {
                         const isLow = item.currentStock <= item.minStockAlert;
                         return (
@@ -34,15 +34,15 @@ export const StockTable = ({ items }: Props) => {
                                 key={`${item.productId}-${item.warehouseName}-${i}`}
                                 className="bg-[#111827] hover:bg-[#1a2232] transition-colors"
                             >
-                                <td className="px-5 py-3 font-mono text-indigo-400">{item.sku}</td>
-                                <td className="px-5 py-3 font-medium text-white">{item.productName}</td>
-                                <td className="px-5 py-3 text-gray-400">{item.warehouseName}</td>
-                                <td className="px-5 py-3 text-right font-semibold text-white">
+                                <td className="px-5 py-4 text-medium font-mono text-indigo-400">{item.sku}</td>
+                                <td className="px-5 py-4 font-medium text-white">{item.productName}</td>
+                                <td className="px-5 py-4 text-gray-400">{item.warehouseName}</td>
+                                <td className="px-5 py-4 text-right font-semibold text-white">
                                     {item.currentStock.toFixed(0)}
                                 </td>
-                                <td className="px-5 py-3 text-gray-400 text-xs">{item.unitOfMeasure}</td>
+                                <td className="px-5 py-3 text-gray-400 text-medium">{item.unitOfMeasure}</td>
                                 <td className="px-5 py-3 text-right text-gray-400">{item.minStockAlert}</td>
-                                <td className="px-5 py-3 text-gray-500 text-xs">{fmt(item.lastUpdated)}</td>
+                                <td className="px-5 py-3 text-gray-500 text-medium">{fmt(item.lastUpdated)}</td>
                                 <td className="px-5 py-3 text-center">
                                     {isLow ? (
                                         <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-red-500/10 text-red-400 text-xs font-medium">
