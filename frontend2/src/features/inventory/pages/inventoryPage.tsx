@@ -5,8 +5,6 @@ import { StockTable } from "../components/StockTable";
 import { AdjustmentModal } from "../components/AdjustmentModal";
 import type { StockItem, AdjustmentPayload } from "../types/inventory";
 import { PlusIcon, FunnelIcon } from "@heroicons/react/24/outline";
-import { MovementPage } from "../../in-out/pages/MovementPage";
-import { MovementForm } from "../../in-out/components/MovementForm";
 
 export const InventoryPage = () => {
     const companyId = JSON.parse(localStorage.getItem("activeCompany") || "{}").id;

@@ -34,7 +34,7 @@ export const DashboardPage = () => {
 
     if (loading) {
         return (
-            <div className="flex h-screen items-center justify-center bg-[#0d1117]">
+            <div className="flex h-screen items-center justify-center ">
                 <div className="flex flex-col items-center gap-4">
                     <div className="w-10 h-10 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
                     <p className="text-gray-500 text-sm">Cargando dashboard...</p>
@@ -44,7 +44,7 @@ export const DashboardPage = () => {
     }
 
     return (
-        <div className="min-h-screen bg-[#0d1117] px-8 py-8">
+        <div className="min-h-screen  px-8 py-8">
 
             {/* Header */}
             <div className="flex items-start justify-between mb-10">

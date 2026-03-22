@@ -20,6 +20,7 @@ const navigation = [
   { name: "Inicio", href: "/", icon: HomeIcon },
   { name: "Dashboard", href: "/dashboard", icon: Squares2X2Icon },
   { name: "Inventario", href: "/inventory", icon: ArchiveBoxIcon},
+  {name: "Categorias", href: "/categories", icon: FolderIcon },
   { name: "Kardex", href: "/kardex", icon: ChartPieIcon },
   {name: "Movimientos", href: "/in-out", icon: DocumentDuplicateIcon },
 ];
@@ -27,7 +28,6 @@ const navigation = [
 const SideBar = () => {
   const { selectedCompany, isCollapsed, toggleCollapse } = useCompany();
 
-  // No mostrar si no hay empresa en localStorage
   if (!selectedCompany) return null;
 
   return (
@@ -35,7 +35,8 @@ const SideBar = () => {
       className={`
         flex flex-col h-screen bg-[#111827] text-white py-6 shrink-0
         transition-all duration-300 ease-in-out overflow-hidden
-        ${isCollapsed ? "w-[68px] px-2" : "w-64 px-3"}
+        {/*border-r border-gray-400*/}
+        ${isCollapsed ? "w-17 px-2" : "w-64 px-3"}
       `}
     >
       {/* Logo + botón colapsar */}

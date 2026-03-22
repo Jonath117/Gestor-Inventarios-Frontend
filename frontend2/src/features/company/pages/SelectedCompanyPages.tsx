@@ -29,7 +29,7 @@ export const SelectedCompanyPages = () => {
     }
 
     return (
-        <div className="min-h-screen bg-[#0d1117] flex flex-col items-center px-6 py-20">
+        <div className="min-h-screen flex flex-col items-center px-6 py-20">
             
             <div className="text-center mb-8">
                 <h1 className="text-4xl md:text-5xl font-extrabold text-white tracking-tight">
