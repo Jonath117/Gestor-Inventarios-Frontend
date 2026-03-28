@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type { Product } from "../types/product.types";
 import { getProducts } from "../../../services/ProductService";
+import { Button } from "../../../components/ButtonComponent";
 
 export const ProductsPage = () => {
     const currentCompanyId = JSON.parse(localStorage.getItem("activeCompany") || "{}").id;
@@ -29,9 +30,9 @@ export const ProductsPage = () => {
         <div className="p-8">
             <div className="flex justify-between items-center mb-6">
                 <h1 className="text-2xl font-bold  text-white">Catálogo de Productos</h1>
-                <button className="bg-blue-600 text-white px-4 py-2 rounded shadow hover:bg-blue-700">
+                <Button variant="primary" size="lg" >
                     + Nuevo Producto
-                </button>
+                </Button>
             </div>
 
             {isLoading ? (
@@ -65,8 +66,8 @@ export const ProductsPage = () => {
                                         <td className="p-3 font-medium text-white">{prod.name}</td>
                                         <td className="p-3 text-gray-100">{prod.categoryName}</td>
                                         <td className="p-3 text-gray-100">{prod.unitName}</td>
-                                        <td className="p-3 text-right text-red-600">${prod.price.toFixed(2)}</td>
-                                        <td className="p-3 text-right font-bold text-green-600">${prod.salePrice.toFixed(2)}</td>
+                                        <td className="p-3 text-right text-red-600 font-medium">{prod.price.toFixed(2)} Bs</td>
+                                        <td className="p-3 text-right font-bold text-green-600 font-medium">{prod.salePrice.toFixed(2)} Bs</td>
                                         <td className="p-3 text-center">
                                             {prod.isSoldOut ? (
                                                 <span className="bg-red-100 text-red-800 text-xs px-2 py-1 rounded">Agotado (86)</span>
@@ -75,7 +76,9 @@ export const ProductsPage = () => {
                                             )}
                                         </td>
                                         <td className="p-3 text-center">
-                                            <button className="text-blue-600 underline hover:text-white cursor-pointer px-2 py-1 rounded">Editar</button>
+                                            <Button variant="link" size="lg" >
+                                                Editar
+                                            </Button>
                                         </td>
                                     </tr>
                                 ))

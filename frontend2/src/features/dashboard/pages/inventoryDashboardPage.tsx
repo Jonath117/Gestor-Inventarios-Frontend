@@ -49,11 +49,11 @@ export const DashboardPage = () => {
             {/* Header */}
             <div className="flex items-start justify-between mb-10">
                 <div>
-                    <p className="text-xs font-semibold text-indigo-400 uppercase tracking-widest mb-1">
+                    <p className="text-1xl font-semibold text-indigo-400 uppercase tracking-widest mb-1">
                         {companyName || "Empresa"}
                     </p>
-                    <h1 className="text-3xl font-bold text-white">Dashboard</h1>
-                    <p className="text-gray-500 text-sm mt-1">
+                    <h1 className="text-4xl font-bold text-white">Dashboard</h1>
+                    <p className="text-gray-500 text-medium mt-1">
                         Resumen general del inventario
                     </p>
                 </div>

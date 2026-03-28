@@ -8,7 +8,6 @@ export interface MovementFormData {
 }
 
 export interface IRegisterMovement {
-    companyId: number,
     productId: number,
     warehouseId: number,
     movementType: "IN" | "OUT",

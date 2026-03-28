@@ -40,14 +40,14 @@ export const StatCard = ({ title, value, icon, accent, subtitle }: Props) => {
 
             <div className="relative z-10 flex items-start justify-between">
                 <div>
-                    <p className="text-xs font-semibold text-gray-500 uppercase tracking-widest mb-3">
+                    <p className="text-high font-semibold text-gray-500 uppercase tracking-widest mb-3">
                         {title}
                     </p>
                     <p className={`text-4xl font-bold ${c.value} tabular-nums`}>
                         {value.toLocaleString()}
                     </p>
                     {subtitle && (
-                        <p className="text-xs text-gray-500 mt-2">{subtitle}</p>
+                        <p className="text-medium text-gray-500 mt-2">{subtitle}</p>
                     )}
                 </div>
                 <div className={`p-3 rounded-xl ${c.bg} border ${c.border} ${c.icon}`}>

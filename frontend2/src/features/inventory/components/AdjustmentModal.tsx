@@ -3,6 +3,7 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import type { AdjustmentPayload } from "../types/inventory";
 import { getProductandWarehouses } from "../../../services/DropDown";
 import { useToast } from "../../../components/Toast";
+import { Button } from "../../../components/ButtonComponent";
 
 interface Props {
     companyId: number;
@@ -11,7 +12,7 @@ interface Props {
 }
 
 export const AdjustmentModal = ({ companyId, onClose, onSubmit }: Props) => {
-    const toast = useToast(); 
+    const toast = useToast();
 
     const [form, setForm] = useState<AdjustmentPayload>({
         productId: 0,
@@ -139,22 +140,14 @@ export const AdjustmentModal = ({ companyId, onClose, onSubmit }: Props) => {
                             className="w-full bg-[#0f172a] border border-[#374151] text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-indigo-500 transition-colors resize-none"
                         />
                     </div>
+                    <div className="flex justify-between gap-5">
+                        <Button variant="danger" size="lg" onClick={onClose} fullWidth={true} >
+                            Cancelar Ajuste
+                        </Button>
 
-                    <div className="flex gap-3 pt-1">
-                        <button
-                            type="button"
-                            onClick={onClose}
-                            className="flex-1 px-4 py-2 rounded-lg border border-[#374151] text-gray-400 hover:text-white hover:border-gray-500 text-sm transition-colors"
-                        >
-                            Cancelar
-                        </button>
-                        <button
-                            type="submit"
-                            disabled={loading || loadingData}
-                            className="flex-1 px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                            {loading ? "Registrando..." : "Registrar"}
-                        </button>
+                        <Button variant="success" size="lg" onClick={handleSubmit} loading={loading} fullWidth={true}>
+                            Registrar Ajuste
+                        </Button>
                     </div>
                 </form>
             </div>

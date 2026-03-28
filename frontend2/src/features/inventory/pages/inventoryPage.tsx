@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { getStock} from "../../../services/GetStock";
+import { getStock } from "../../../services/GetStock";
 import { makeAdjustment } from "../../../services/MakeAjustment";
 import { StockTable } from "../components/StockTable";
 import { AdjustmentModal } from "../components/AdjustmentModal";
 import type { StockItem, AdjustmentPayload } from "../types/inventory";
 import { PlusIcon, FunnelIcon } from "@heroicons/react/24/outline";
+import { Button } from "../../../components/ButtonComponent";
 
 export const InventoryPage = () => {
     const companyId = JSON.parse(localStorage.getItem("activeCompany") || "{}").id;
@@ -28,7 +29,7 @@ export const InventoryPage = () => {
 
     const handleAdjustment = async (data: AdjustmentPayload) => {
         await makeAdjustment(companyId, data);
-        fetchStock(); 
+        fetchStock();
     };
 
     const warehouses = [...new Set(stock.map((i) => i.warehouseName))];
@@ -53,13 +54,10 @@ export const InventoryPage = () => {
                     </p>
                 </div>
 
-                <button
-                    onClick={() => setShowModal(true)}
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium rounded-lg transition-colors"
-                >
-                    <PlusIcon className="w-4 h-4" />
+                <Button variant="primary" size="lg" onClick={() => setShowModal(true)}>
                     Registrar Ajuste
-                </button>
+                </Button>
+
             </div>
 
             {/* Filtro por bodega */}
@@ -68,22 +66,20 @@ export const InventoryPage = () => {
                 <div className="flex gap-2 flex-wrap">
                     <button
                         onClick={() => setWarehouseFilter("")}
-                        className={`px-5 py-2 rounded-lg text-medium font-medium transition-colors ${
-                            warehouseFilter === ""
-                                ? "bg-indigo-600 text-white"
-                                : "bg-[#1f2937] text-gray-400 hover:text-white"
-                        }`}
+                        className={`px-5 py-2 rounded-lg text-medium font-medium transition-colors ${warehouseFilter === ""
+                            ? "bg-indigo-600 text-white"
+                            : "bg-[#1f2937] text-gray-400 hover:text-white"
+                            }`}
                     > Todas las bodegas
                     </button>
                     {warehouses.map((w) => (
                         <button
                             key={w}
                             onClick={() => setWarehouseFilter(w)}
-                            className={`px-5 py-2 rounded-lg text-medium font-medium transition-colors ${
-                                warehouseFilter === w
-                                    ? "bg-indigo-600 text-white"
-                                    : "bg-[#1f2937] text-gray-400 hover:text-white"
-                            }`}
+                            className={`px-5 py-2 rounded-lg text-medium font-medium transition-colors ${warehouseFilter === w
+                                ? "bg-indigo-600 text-white"
+                                : "bg-[#1f2937] text-gray-400 hover:text-white"
+                                }`}
                         >
                             {w}
                         </button>

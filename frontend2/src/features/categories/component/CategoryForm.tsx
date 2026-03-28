@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import type { Category, CategoryCreate } from "../types/category";
+import { Button } from "../../../components/ButtonComponent";
 
 interface Props {
     initialData?: Category | null;
@@ -24,42 +25,42 @@ export const CategoryForm = ({ initialData, onSubmit, onCancel }: Props) => {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (initialData) {
-            onSubmit({ id: initialData.id, name, description }); 
+            onSubmit({ id: initialData.id, name, description });
         } else {
-            onSubmit({ name, description }); 
+            onSubmit({ name, description });
         }
     };
 
     return (
-        <form onSubmit={handleSubmit} className="bg-[#111827] border p-4 rounded-xl border-[#1f2937] min-w-75">
+        <form onSubmit={handleSubmit} className="bg-[#111827] border p-5 sm:p-6 rounded-xl border-[#1f2937] w-full max-w-md mx-auto shadow-lg">
             <h3 className="font-bold mb-4 text-medium text-white">{initialData ? "Editar Categoría" : "Nueva Categoría"}</h3>
-            
+
             <div className="mb-2">
                 <label className="block text-medium text-white">Nombre</label>
-                <input 
-                    required 
-                    value={name} 
-                    onChange={e => setName(e.target.value)} 
-                    className="border p-2 w-full rounded-lg bg-[#0f172a] border-[#374151] text-white focus:outline-none focus:border-indigo-500 transition-colors" 
-                />
-            </div>
-            
-            <div className="mb-4">
-                <label className="block text-medium text-white">Descripción (Opcional)</label>
-                <input 
-                    value={description} 
-                    onChange={e => setDescription(e.target.value)} 
-                    className="border p-2 w-full rounded-lg bg-[#0f172a] border-[#374151] text-white focus:outline-none focus:border-indigo-500 transition-colors" 
+                <input
+                    required
+                    value={name}
+                    onChange={e => setName(e.target.value)}
+                    className="border p-2 w-full rounded-lg bg-[#0f172a] border-[#374151] text-white focus:outline-none focus:border-indigo-500 transition-colors"
                 />
             </div>
 
-            <div className="flex gap-2">
-                <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">
+            <div className="mb-4">
+                <label className="block text-medium text-white">Descripción (Opcional)</label>
+                <input
+                    value={description}
+                    onChange={e => setDescription(e.target.value)}
+                    className="border p-2 w-full rounded-lg bg-[#0f172a] border-[#374151] text-white focus:outline-none focus:border-indigo-500 transition-colors"
+                />
+            </div>
+
+            <div className="flex gap-5">
+                <Button variant="success" size="lg" onClick={handleSubmit} fullWidth={true}>
                     Guardar
-                </button>
-                <button type="button" onClick={onCancel} className="bg-gray-300 px-4 py-2 rounded">
+                </Button>
+                <Button variant="danger" size="lg" onClick={onCancel} fullWidth={true}>
                     Cancelar
-                </button>
+                </Button>
             </div>
         </form>
     );

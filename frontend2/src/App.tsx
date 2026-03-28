@@ -10,7 +10,7 @@ import { KardexPage } from './features/inventory-movements/pages/KardexPage.tsx'
 import { MovementPage } from './features/in-out/pages/MovementPage.tsx';
 import { CategoriesPage } from './features/categories/pages/categoriesPage.tsx';
 import { ProductsPage } from './features/product/pages/ProductsPage.tsx';
-import { UnitPage } from './features/units/pages/UnitPage.tsx';
+import { UnitsPage } from './features/units/pages/UnitsPage.tsx';
 
 function App() {
 
@@ -27,7 +27,7 @@ function App() {
               <Route path="/in-out" element={<MovementPage />} />
               <Route path="/categories" element={<CategoriesPage />} />
               <Route path="/products" element={<ProductsPage />} />
-              <Route path="/units" element={<UnitPage />} />
+              <Route path="/units" element={<UnitsPage />} />
             </Route>
           </Routes>
         </ToastProvider>
