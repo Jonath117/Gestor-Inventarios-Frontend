@@ -76,7 +76,6 @@ export const MovementForm = () => {
             const companyId = JSON.parse(localStorage.getItem("activeCompany") || "{}").id;
 
             await registerMovement(companyId, {
-                companyId: companyId,
                 productId: form.productId as number,
                 warehouseId: form.warehouseId as number,
                 movementType: form.movementType as "IN" | "OUT",

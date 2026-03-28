@@ -1,4 +1,4 @@
-import type { IUnitFormData } from "../features/units/types/Units";
+import type { IUnitCreate } from "../features/units/types/Units";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -15,7 +15,7 @@ export const getUnits = async (companyId: number) => {
 
     return response.json();
 }
-export const createUnit = async (companyId: number, unitData: IUnitFormData) => {
+export const createUnit = async (companyId: number, unitData: IUnitCreate) => {
     const response = await fetch(`${API_URL}/Unit`, {
         method: "POST",
         headers: {
