@@ -1,10 +1,12 @@
+const API_URL = import.meta.env.VITE_API_URL;
+
 export const makeAdjustment = async (companyId: number, adjustmentData: {
     productId: number;
     warehouseId: number;
     quantity: number;
     reason: string;
 }) => {
-    const response = await fetch("http://localhost:5153/api/Adjustment", {
+    const response = await fetch(`${API_URL}/Adjustment`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",

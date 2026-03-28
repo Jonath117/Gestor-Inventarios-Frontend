@@ -1,6 +1,8 @@
+const API_URL = import.meta.env.VITE_API_URL;
+
 export const getDashboard = async (companyId: number) => {
     const response = await fetch(
-        "http://localhost:5153/api/inventory/dashboard",
+        `${API_URL}/inventory/dashboard`,
         {
             headers: {
                 "x-company-id": companyId.toString(),
@@ -8,7 +10,7 @@ export const getDashboard = async (companyId: number) => {
         }
     );
 
-    if(!response.ok){
+    if (!response.ok) {
         throw new Error("Error al obtener el dashboard");
     }
 

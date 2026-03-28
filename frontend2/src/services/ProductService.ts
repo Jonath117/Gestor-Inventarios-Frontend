@@ -1,5 +1,7 @@
+const API_URL = import.meta.env.VITE_API_URL;
+
 export const getProducts = async (companyId: number) => {
-    const response = await fetch("http://localhost:5153/api/Product", {
+    const response = await fetch(`${API_URL}/Product`, {
         headers: {
             "x-company-id": companyId.toString(),
             "Accept": "application/json",

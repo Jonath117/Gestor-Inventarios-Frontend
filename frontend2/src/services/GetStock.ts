@@ -1,18 +1,10 @@
-// ### Todo el inventario de la Empresa (US-05)
-// GET http://localhost:5290/api/GetStock
-// x-company-id: 1
-// Accept: application/json
-
-// ### Filtrado solo por la Bodega Central (US-06)
-// GET http://localhost:5290/api/GetStock?warehouseId=1
-// x-company-id: 1
-// Accept: application/json
+const API_URL = import.meta.env.VITE_API_URL;
 
 export const getStock = async (companyId: number, warehouseId?: number) => {
     const url = warehouseId
-        ? `http://localhost:5153/api/GetStock?warehouseId=${warehouseId}`
-        : "http://localhost:5153/api/GetStock";
-    
+        ? `${API_URL}/GetStock?warehouseId=${warehouseId}`
+        : `${API_URL}/GetStock`;
+
     const response = await fetch(url, {
         headers: {
             "x-company-id": companyId.toString(),

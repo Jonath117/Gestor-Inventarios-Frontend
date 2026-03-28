@@ -1,16 +1,15 @@
 import { NavLink } from "react-router-dom";
 import {
   HomeIcon,
-  UsersIcon,
   FolderIcon,
-  CalendarIcon,
   DocumentDuplicateIcon,
   ChartPieIcon,
   ChevronDoubleLeftIcon,
   ChevronDoubleRightIcon,
   Squares2X2Icon, // Dashboard
   ArchiveBoxIcon,
-  ClipboardIcon 
+  ClipboardIcon,
+  NumberedListIcon
 
 } from "@heroicons/react/24/outline";
 import { useCompany } from "../../features/company/pages/CompanyContext.tsx";
@@ -20,11 +19,12 @@ import { useCompany } from "../../features/company/pages/CompanyContext.tsx";
 const navigation = [
   { name: "Inicio", href: "/", icon: HomeIcon },
   { name: "Dashboard", href: "/dashboard", icon: Squares2X2Icon },
-  { name: "Inventario", href: "/inventory", icon: ArchiveBoxIcon},
-  {name: "Categorias", href: "/categories", icon: FolderIcon },
-  {name: "Productos", href: "/products", icon: ClipboardIcon },
+  { name: "Inventario", href: "/inventory", icon: ArchiveBoxIcon },
+  { name: "Categorias", href: "/categories", icon: FolderIcon },
+  { name: "Productos", href: "/products", icon: ClipboardIcon },
   { name: "Kardex", href: "/kardex", icon: ChartPieIcon },
-  {name: "Movimientos", href: "/in-out", icon: DocumentDuplicateIcon },
+  { name: "Movimientos", href: "/in-out", icon: DocumentDuplicateIcon },
+  { name: "Unidades", href: "/units", icon: NumberedListIcon },
 ];
 
 const SideBar = () => {
@@ -109,7 +109,7 @@ const SideBar = () => {
                     <span className="flex-1">{item.name}</span>
                     {"badge" in item && item.badge !== undefined && (
                       <span className="text-xs font-semibold bg-[#1a2232] border border-[#2d3748] text-gray-300 rounded-full px-2 py-0.5 min-w-[1.5rem] text-center">
-                        
+
                       </span>
                     )}
                   </>
