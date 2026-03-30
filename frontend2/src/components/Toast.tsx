@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback, type ReactNode } from "react";
+import { createContext, useContext, useState, useCallback, useRef, type ReactNode } from "react";
 import {
     CheckCircleIcon,
     ExclamationTriangleIcon,
@@ -15,12 +15,15 @@ interface Toast {
     type: ToastType;
     title: string;
     message?: string;
+    onConfirm?: (val: boolean) => void;
 }
 interface ToastContextType {
     success: (title: string, message?: string) => void;
     error: (title: string, message?: string) => void;
     warning: (title: string, message?: string) => void;
     info: (title: string, message?: string) => void;
+
+    confirm: (title: string, message?: string) => Promise<boolean>;
 }
 
 // ── Context ────────────────────────────────────────────────────────────────
@@ -71,6 +74,8 @@ const icons: Record<ToastType, React.ReactNode> = {
 const ToastItem = ({ toast, onRemove }: { toast: Toast; onRemove: (id: number) => void }) => {
     const s = styles[toast.type];
 
+
+
     return (
         <div
             className={`
@@ -96,6 +101,28 @@ const ToastItem = ({ toast, onRemove }: { toast: Toast; onRemove: (id: number) =
                 {toast.message && (
                     <p className="text-1xl text-gray-400 mt-0.5 leading-relaxed">{toast.message}</p>
                 )}
+                {toast.onConfirm && (
+                    <div className="flex gap-2 mt-2">
+                        <button
+                            onClick={() => {
+                                toast.onConfirm?.(true);
+                                onRemove(toast.id);
+                            }}
+                            className="px-3 py-1 rounded bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+                        >
+                            Confirmar
+                        </button>
+                        <button
+                            onClick={() => {
+                                toast.onConfirm?.(false);
+                                onRemove(toast.id);
+                            }}
+                            className="px-3 py-1 rounded bg-gray-600 text-white hover:bg-gray-700 transition-colors"
+                        >
+                            Cancelar
+                        </button>
+                    </div>
+                )}
             </div>
 
             {/* Cerrar */}
@@ -115,23 +142,30 @@ const ToastItem = ({ toast, onRemove }: { toast: Toast; onRemove: (id: number) =
 // ── Provider ───────────────────────────────────────────────────────────────
 export const ToastProvider = ({ children }: { children: ReactNode }) => {
     const [toasts, setToasts] = useState<Toast[]>([]);
-    let counter = 0;
-
-    const add = useCallback((type: ToastType, title: string, message?: string) => {
-        const id = Date.now() + counter++;
-        setToasts((prev) => [...prev, { id, type, title, message }]);
-        setTimeout(() => remove(id), 3000);
-    }, []);
+    const counter = useRef(0);
 
     const remove = useCallback((id: number) => {
         setToasts((prev) => prev.filter((t) => t.id !== id));
     }, []);
+
+    const add = useCallback((type: ToastType, title: string, message?: string, onConfirm?: (val: boolean) => void) => {
+        const id = Date.now() + counter.current++;
+        setToasts((prev) => [...prev, { id, type, title, message, onConfirm }]);
+
+        if (!onConfirm) {
+            setTimeout(() => remove(id), 3000);
+        }
+    }, [remove]);
 
     const ctx: ToastContextType = {
         success: (t, m) => add("success", t, m),
         error: (t, m) => add("error", t, m),
         warning: (t, m) => add("warning", t, m),
         info: (t, m) => add("info", t, m),
+        confirm: (t, m) =>
+            new Promise((resolve) =>
+                add("warning", t, m, (result: boolean) => resolve(result))
+            ),
     };
 
     return (

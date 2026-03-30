@@ -47,7 +47,16 @@ export const UnitsPage = () => {
         <div className="p-4 sm:p-6 lg:p-8 w-full">
             {/* Header Responsive */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4 text-white">
-                <h1 className="text-2xl font-bold">Unidades de Medida</h1>
+
+                {isFormOpen ? (
+                    <div className="flex justify-center w-full">
+                        <h1 className="text-2xl font-bold ">Nueva Unidad</h1>
+                    </div>
+                ) : (
+                    <h1 className="text-2xl font-bold">Unidades de Medida</h1>
+                )}
+
+
                 {!isFormOpen && (
                     <Button variant="primary" size="lg" onClick={() => setIsFormOpen(true)}>
                         + Nueva Unidad
@@ -74,6 +83,7 @@ export const UnitsPage = () => {
                                     <th className="p-4 font-semibold">Descripción</th>
                                 </tr>
                             </thead>
+
                             <tbody className="divide-y divide-[#1f2937]">
                                 {units.length === 0 ? (
                                     <tr>

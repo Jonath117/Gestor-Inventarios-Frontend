@@ -4,7 +4,7 @@ import { makeAdjustment } from "../../../services/MakeAjustment";
 import { StockTable } from "../components/StockTable";
 import { AdjustmentModal } from "../components/AdjustmentModal";
 import type { StockItem, AdjustmentPayload } from "../types/inventory";
-import { PlusIcon, FunnelIcon } from "@heroicons/react/24/outline";
+import { FunnelIcon } from "@heroicons/react/24/outline";
 import { Button } from "../../../components/ButtonComponent";
 
 export const InventoryPage = () => {
@@ -62,7 +62,7 @@ export const InventoryPage = () => {
 
             {/* Filtro por bodega */}
             <div className="flex items-center gap-3 mb-5">
-                <FunnelIcon className="w-4 h-4 text-gray-500" />
+                <FunnelIcon className="w-7 h-7 text-gray-500" />
                 <div className="flex gap-2 flex-wrap">
                     <button
                         onClick={() => setWarehouseFilter("")}

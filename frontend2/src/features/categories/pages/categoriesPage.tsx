@@ -52,7 +52,17 @@ export const CategoriesPage = () => {
     return (
         <div className="p-8">
             <div className="flex justify-between items-center mb-6 text-white">
-                <h1 className="text-2xl font-bold">Categorías</h1>
+
+                {isFormOpen ? (
+                    <div className="flex justify-center w-full">
+                        <h1 className="text-2xl font-bold ">{editingCategory ? "Editar Categoría" : "Nueva Categoría"}</h1>
+                    </div>
+                ) : (
+                    <h1 className="text-2xl font-bold">Categorías</h1>
+                )}
+
+
+
                 {!isFormOpen && (
                     <Button variant="primary" size="lg" onClick={() => setIsFormOpen(true)}>
                         + Nueva Categoría
@@ -79,18 +89,26 @@ export const CategoriesPage = () => {
                                 <th className="p-3">Acciones</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            {categories.map(cat => (
-                                <tr key={cat.id} className=" border-b hover:bg-gray-800">
-                                    <td className="p-3 font-medium text-medium text-white">{cat.name}</td>
-                                    <td className="p-3 text-medium text-gray-100">{cat.description}</td>
-                                    <td className="p-3">
-                                        <Button variant="link" size="lg" onClick={() => handleEdit(cat)}>
-                                            Editar
-                                        </Button>
+                        <tbody className="divide-y divide-[#1f2937]">
+                            {categories.length === 0 ? (
+                                <tr>
+                                    <td colSpan={3} className="p-6 text-center text-gray-500">
+                                        No hay categorías registradas.
                                     </td>
                                 </tr>
-                            ))}
+                            ) : (
+                                categories.map(cat => (
+                                    <tr key={cat.id} className=" border-b hover:bg-gray-800">
+                                        <td className="p-3 font-medium text-medium text-white">{cat.name}</td>
+                                        <td className="p-3 text-medium text-gray-100">{cat.description}</td>
+                                        <td className="p-3">
+                                            <Button variant="link" size="lg" onClick={() => handleEdit(cat)}>
+                                                Editar
+                                            </Button>
+                                        </td>
+                                    </tr>
+                                ))
+                            )}
                         </tbody>
                     </table>
                 </div>

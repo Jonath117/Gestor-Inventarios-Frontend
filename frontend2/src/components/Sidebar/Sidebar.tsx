@@ -20,10 +20,10 @@ const navigation = [
   { name: "Inicio", href: "/", icon: HomeIcon },
   { name: "Dashboard", href: "/dashboard", icon: Squares2X2Icon },
   { name: "Inventario", href: "/inventory", icon: ArchiveBoxIcon },
-  { name: "Categorias", href: "/categories", icon: FolderIcon },
   { name: "Productos", href: "/products", icon: ClipboardIcon },
-  { name: "Kardex", href: "/kardex", icon: ChartPieIcon },
   { name: "Movimientos", href: "/in-out", icon: DocumentDuplicateIcon },
+  { name: "Kardex", href: "/kardex", icon: ChartPieIcon },
+  { name: "Categorias", href: "/categories", icon: FolderIcon },
   { name: "Unidades", href: "/units", icon: NumberedListIcon },
 ];
 

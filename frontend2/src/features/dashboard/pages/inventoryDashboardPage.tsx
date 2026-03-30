@@ -7,6 +7,7 @@ import {
     CircleStackIcon,
     ExclamationTriangleIcon,
     ArrowPathIcon,
+    BuildingStorefrontIcon,
 } from "@heroicons/react/24/outline";
 
 export const DashboardPage = () => {
@@ -93,6 +94,14 @@ export const DashboardPage = () => {
                             : "Todo en orden"
                     }
                     icon={<ExclamationTriangleIcon className="w-6 h-6" />}
+                />
+
+                <StatCard
+                    title="Total Bodegas"
+                    value={dashboard?.totalWarehouses ?? 0}
+                    accent="emerald"
+                    subtitle="Bodegas registradas"
+                    icon={<BuildingStorefrontIcon className="w-6 h-6" />}
                 />
             </div>
 

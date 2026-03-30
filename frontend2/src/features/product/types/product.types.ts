@@ -3,22 +3,38 @@ export interface Product {
     sku: string;
     name: string;
     description?: string;
-    price: number;       
-    salePrice: number;   
+    price: number;
+    salePrice: number;
     minStockAlert: number;
     isActive: boolean;
     isSoldOut: boolean;
-    categoryName: string; 
-    unitName: string;     
+    categoryId: number;
+    categoryName: string;
+    unitId: number;
+    unitName: string;
 }
 
-export interface ProductCreate {
+export interface IProductCreate {
     sku: string;
     name: string;
     description?: string;
     price: number;
     salePrice: number;
     minStockAlert: number;
-    categoryId: number; 
-    unitId: number;     
+    categoryId: number;
+    unitId: number;
+    isActive: boolean;
+}
+
+export interface IProductUpdate {
+    id: number;
+    sku: string;
+    name: string;
+    description?: string;
+    price: number;
+    salePrice: number;
+    minStockAlert: number;
+    categoryId: number;
+    unitId: number;
+    isActive: boolean;
 }
