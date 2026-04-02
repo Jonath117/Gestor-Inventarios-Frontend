@@ -4,6 +4,8 @@ import { UnitsForm } from "../components/UnitsForm";
 import type { IUnit, IUnitCreate } from "../types/Units";
 import { Button } from "../../../components/ButtonComponent";
 import { useToast } from "../../../components/Toast";
+import { DataTable } from "../../../components/DataTableComponent";
+import type { ColumnDef } from "../../../components/DataTableComponent";
 
 export const UnitsPage = () => {
     const companyId = JSON.parse(localStorage.getItem("activeCompany") || "{}").id;
@@ -43,6 +45,21 @@ export const UnitsPage = () => {
         }
     };
 
+    const columns: ColumnDef<IUnit>[] = [
+        {
+            header: "Nombre",
+            accessor: "name",
+            className: "font-medium text-white"
+        },
+        {
+            header: "Descripción",
+            cell: (unit) =>
+                unit.description || (
+                    <span className="italic text-gray-600">Sin descripción</span>
+                )
+        }
+    ]
+
     return (
         <div className="p-4 sm:p-6 lg:p-8 w-full">
             {/* Header Responsive */}
@@ -72,39 +89,12 @@ export const UnitsPage = () => {
                     />
                 </div>
             ) : (
-                <div className="overflow-x-auto bg-[#111827] rounded-xl border border-[#1f2937] shadow-lg">
-                    {loading ? (
-                        <div className="p-8 text-center text-gray-400">Cargando unidades...</div>
-                    ) : (
-                        <table className="w-full text-left border-collapse min-w-[500px]">
-                            <thead className="bg-[#1f2937] text-gray-400 uppercase text-medium tracking-wider">
-                                <tr>
-                                    <th className="p-4 font-semibold">Nombre</th>
-                                    <th className="p-4 font-semibold">Descripción</th>
-                                </tr>
-                            </thead>
-
-                            <tbody className="divide-y divide-[#1f2937]">
-                                {units.length === 0 ? (
-                                    <tr>
-                                        <td colSpan={3} className="p-6 text-center text-gray-500">
-                                            No hay unidades registradas.
-                                        </td>
-                                    </tr>
-                                ) : (
-                                    units.map((unit) => (
-                                        <tr key={unit.id} className="hover:bg-[#1f2937]/50 transition-colors">
-                                            <td className="p-4 text-sm text-gray-100 font-medium">{unit.name}</td>
-                                            <td className="p-4 text-medium text-white">
-                                                {unit.description || <span className="italic text-gray-600">Sin descripción</span>}
-                                            </td>
-                                        </tr>
-                                    ))
-                                )}
-                            </tbody>
-                        </table>
-                    )}
-                </div>
+                <DataTable
+                    data={units}
+                    columns={columns}
+                    loading={loading}
+                    emptyMessage="No hay unidades registradas"
+                />
             )}
         </div>
     );

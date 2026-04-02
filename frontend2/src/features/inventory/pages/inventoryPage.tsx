@@ -42,7 +42,7 @@ export const InventoryPage = () => {
 
     return (
         <div className="min-h-screen px-8 py-8">
-            {/* Header */}
+
             <div className="flex items-center justify-between mb-8">
                 <div>
                     <h1 className="text-2xl font-bold text-white">Inventario</h1>
@@ -60,7 +60,6 @@ export const InventoryPage = () => {
 
             </div>
 
-            {/* Filtro por bodega */}
             <div className="flex items-center gap-3 mb-5">
                 <FunnelIcon className="w-7 h-7 text-gray-500" />
                 <div className="flex gap-2 flex-wrap">
@@ -87,7 +86,6 @@ export const InventoryPage = () => {
                 </div>
             </div>
 
-            {/* Tabla */}
             {loading ? (
                 <div className="flex items-center justify-center h-64 text-gray-500">
                     Cargando inventario...
@@ -100,7 +98,6 @@ export const InventoryPage = () => {
                 <StockTable items={filtered} />
             )}
 
-            {/* Modal de ajuste */}
             {showModal && (
                 <AdjustmentModal
                     companyId={companyId}
