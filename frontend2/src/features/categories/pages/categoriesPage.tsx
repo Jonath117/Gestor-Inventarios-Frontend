@@ -15,12 +15,14 @@ export const CategoriesPage = () => {
 
     const toast = useToast();
 
-    const companyId = JSON.parse(localStorage.getItem("activeCompany") || "{}").id;
+    const activeCompany = JSON.parse(localStorage.getItem("activeCompany") || "{}");
+    const companyId = activeCompany.id;
+    const companyCen = activeCompany.companyCen;
 
     const fetchCategories = async () => {
         try {
             setLoading(true);
-            const data = await getCategories(companyId);
+            const data = await getCategories(companyCen, companyId);
             setCategories(data);
         } catch (err: any) {
             toast.error("Error al obtener las categorías", err.message);
@@ -30,15 +32,15 @@ export const CategoriesPage = () => {
     };
 
     useEffect(() => {
-        fetchCategories();
-    }, [companyId]);
+        if (companyCen) fetchCategories();
+    }, [companyCen]);
 
     const handleSave = async (data: any) => {
         try {
-            if (data.id) {
-                await updateCategory(companyId, data);
+            if (data.categoryCen) {
+                await updateCategory(companyCen, companyId, data);
             } else {
-                await createCategory(companyId, data);
+                await createCategory(companyCen, companyId, data);
             }
             setIsFormOpen(false);
             setEditingCategory(null);

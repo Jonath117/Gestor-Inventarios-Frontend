@@ -1,19 +1,28 @@
 import { useNavigate } from "react-router-dom";
 import { useCompany } from "../pages/CompanyContext";
-import type { Company } from "../types/company";
 import { BuildingOfficeIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import { getCompanyDetails } from "../../../services/ChooseCompnay";
 
 interface Props {
-    company: Company;
+    company: any;
 }
 
 export const CompanyCard = ({ company }: Props) => {
     const navigate = useNavigate();
     const { setSelectedCompany } = useCompany();
 
-    const handleSelect = () => {
-        setSelectedCompany(company);
-        navigate("/dashboard");
+    const handleSelect = async () => {
+        try {
+            const details = await getCompanyDetails(company.companyCen);
+            setSelectedCompany({
+                id: details.companyId,
+                companyCen: details.companyCen,
+                name: details.name
+            });
+            navigate("/dashboard");
+        } catch (error) {
+            console.error("Error al seleccionar empresa:", error);
+        }
     };
 
     return (

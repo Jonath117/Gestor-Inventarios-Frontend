@@ -14,10 +14,14 @@ interface Props {
 export const AdjustmentModal = ({ companyId, onClose, onSubmit }: Props) => {
     const toast = useToast();
 
-    const [form, setForm] = useState<AdjustmentPayload>({
-        productId: 0,
-        warehouseId: 0,
+    const activeCompany = JSON.parse(localStorage.getItem("activeCompany") || "{}");
+    const companyCen = activeCompany.companyCen;
+
+    const [form, setForm] = useState({
+        productCen: "",
+        warehouseCen: "",
         quantity: 0,
+        adjustmentType: "IN",
         reason: "",
     });
 
@@ -28,8 +32,9 @@ export const AdjustmentModal = ({ companyId, onClose, onSubmit }: Props) => {
 
     useEffect(() => {
         const loadDropdownData = async () => {
+            if (!companyCen) return;
             try {
-                const data = await getProductandWarehouses(companyId);
+                const data = await getProductandWarehouses(companyCen, companyId);
                 setProducts(data.products);
                 setWarehouses(data.warehouses);
             } catch {
@@ -39,13 +44,13 @@ export const AdjustmentModal = ({ companyId, onClose, onSubmit }: Props) => {
             }
         };
         loadDropdownData();
-    }, [companyId]);
+    }, [companyCen]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setForm((prev) => ({
             ...prev,
-            [name]: name === "reason" ? value : Number(value),
+            [name]: name === "quantity" ? Number(value) : value,
         }));
     };
 
@@ -53,11 +58,22 @@ export const AdjustmentModal = ({ companyId, onClose, onSubmit }: Props) => {
         e.preventDefault();
         setLoading(true);
         try {
-            await onSubmit(form);
+            const payload: AdjustmentPayload = {
+                warehouseCen: form.warehouseCen,
+                reason: form.reason,
+                lines: [
+                    {
+                        productCen: form.productCen,
+                        quantity: form.quantity,
+                        adjustmentType: form.adjustmentType
+                    }
+                ]
+            };
+            await onSubmit(payload);
             toast.success("Ajuste registrado", "El stock fue actualizado correctamente.");
             onClose();
-        } catch {
-            toast.error("Error al registrar", "No se pudo registrar el ajuste. Intenta nuevamente.");
+        } catch (error: any) {
+            toast.error("Error al registrar", error.message || "No se pudo registrar el ajuste.");
         } finally {
             setLoading(false);
         }
@@ -82,38 +98,53 @@ export const AdjustmentModal = ({ companyId, onClose, onSubmit }: Props) => {
                             Cargando catálogo...
                         </div>
                     ) : (
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <label className="text-xs text-gray-400 mb-1 block">Producto</label>
-                                <select
-                                    name="productId"
-                                    value={form.productId || ""}
-                                    onChange={handleChange}
-                                    required
-                                    className="w-full bg-[#0f172a] border border-[#374151] text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-indigo-500 transition-colors"
-                                >
-                                    <option value="" disabled>Seleccione...</option>
-                                    {products.map((p) => (
-                                        <option key={p.id} value={p.id}>{p.sku} - {p.name}</option>
-                                    ))}
-                                </select>
+                        <>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="col-span-2">
+                                    <label className="text-xs text-gray-400 mb-1 block">Producto</label>
+                                    <select
+                                        name="productCen"
+                                        value={form.productCen}
+                                        onChange={handleChange}
+                                        required
+                                        className="w-full bg-[#0f172a] border border-[#374151] text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-indigo-500 transition-colors"
+                                    >
+                                        <option value="" disabled>Seleccione...</option>
+                                        {products.map((p) => (
+                                            <option key={p.productCen} value={p.productCen}>{p.sku} - {p.name}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div>
+                                    <label className="text-xs text-gray-400 mb-1 block">Bodega</label>
+                                    <select
+                                        name="warehouseCen"
+                                        value={form.warehouseCen}
+                                        onChange={handleChange}
+                                        required
+                                        className="w-full bg-[#0f172a] border border-[#374151] text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-indigo-500 transition-colors"
+                                    >
+                                        <option value="" disabled>Seleccione...</option>
+                                        {warehouses.map((w) => (
+                                            <option key={w.warehouseCen} value={w.warehouseCen}>{w.name}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div>
+                                    <label className="text-xs text-gray-400 mb-1 block">Tipo Ajuste</label>
+                                    <select
+                                        name="adjustmentType"
+                                        value={form.adjustmentType}
+                                        onChange={handleChange}
+                                        required
+                                        className="w-full bg-[#0f172a] border border-[#374151] text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-indigo-500 transition-colors"
+                                    >
+                                        <option value="IN">Entrada (+)</option>
+                                        <option value="OUT">Salida (-)</option>
+                                    </select>
+                                </div>
                             </div>
-                            <div>
-                                <label className="text-xs text-gray-400 mb-1 block">Bodega</label>
-                                <select
-                                    name="warehouseId"
-                                    value={form.warehouseId || ""}
-                                    onChange={handleChange}
-                                    required
-                                    className="w-full bg-[#0f172a] border border-[#374151] text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-indigo-500 transition-colors"
-                                >
-                                    <option value="" disabled>Seleccione...</option>
-                                    {warehouses.map((w) => (
-                                        <option key={w.id} value={w.id}>{w.name}</option>
-                                    ))}
-                                </select>
-                            </div>
-                        </div>
+                        </>
                     )}
 
                     <div>
@@ -124,6 +155,7 @@ export const AdjustmentModal = ({ companyId, onClose, onSubmit }: Props) => {
                             value={form.quantity || ""}
                             onChange={handleChange}
                             required
+                            min="1"
                             className="w-full bg-[#0f172a] border border-[#374151] text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-indigo-500 transition-colors"
                         />
                     </div>
@@ -136,17 +168,17 @@ export const AdjustmentModal = ({ companyId, onClose, onSubmit }: Props) => {
                             onChange={handleChange}
                             required
                             rows={3}
-                            placeholder="Ej: Compra inicial de inventario"
+                            placeholder="Ej: Ajuste por inventario físico"
                             className="w-full bg-[#0f172a] border border-[#374151] text-white rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-indigo-500 transition-colors resize-none"
                         />
                     </div>
                     <div className="flex justify-between gap-5">
                         <Button variant="danger" size="lg" onClick={onClose} fullWidth={true} >
-                            Cancelar Ajuste
+                            Cancelar
                         </Button>
 
-                        <Button variant="success" size="lg" onClick={handleSubmit} loading={loading} fullWidth={true}>
-                            Registrar Ajuste
+                        <Button variant="success" size="lg" type="submit" loading={loading} fullWidth={true}>
+                            Registrar
                         </Button>
                     </div>
                 </form>

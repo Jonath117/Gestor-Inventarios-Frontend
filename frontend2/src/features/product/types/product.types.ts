@@ -1,40 +1,40 @@
 export interface Product {
-    id: number;
+    productCen: string;
     sku: string;
     name: string;
     description?: string;
-    price: number;
-    salePrice: number;
-    minStockAlert: number;
-    isActive: boolean;
-    isSoldOut: boolean;
-    categoryId: number;
+    categoryCen: string;
     categoryName: string;
-    unitId: number;
+    unitCen: string;
     unitName: string;
+    salePrice: number;
+    costPrice?: number;
+    reorderLevel: number;
+    status: string;
+    stationCode?: string;
 }
 
 export interface IProductCreate {
     sku: string;
     name: string;
     description?: string;
-    price: number;
+    categoryCen: string;
+    unitCen: string;
     salePrice: number;
-    minStockAlert: number;
-    categoryId: number;
-    unitId: number;
-    isActive: boolean;
+    costPrice?: number;
+    reorderLevel: number;
+    stationCode?: string;
 }
 
 export interface IProductUpdate {
-    id: number;
+    productCen: string;
     sku: string;
     name: string;
     description?: string;
-    price: number;
+    categoryCen: string;
+    unitCen: string;
     salePrice: number;
-    minStockAlert: number;
-    categoryId: number;
-    unitId: number;
-    isActive: boolean;
+    costPrice?: number;
+    reorderLevel: number;
+    stationCode?: string;
 }

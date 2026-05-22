@@ -15,12 +15,14 @@ export const DashboardPage = () => {
     const [loading, setLoading] = useState(true);
     const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
-    const companyId = JSON.parse(localStorage.getItem("activeCompany") || "{}").id;
-    const companyName = JSON.parse(localStorage.getItem("activeCompany") || "{}").name;
+    const activeCompany = JSON.parse(localStorage.getItem("activeCompany") || "{}");
+    const companyId = activeCompany.id;
+    const companyCen = activeCompany.companyCen;
+    const companyName = activeCompany.name;
 
     const fetchData = () => {
         setLoading(true);
-        getDashboard(companyId)
+        getDashboard(companyCen, companyId)
             .then((data) => {
                 setDashboard(data);
                 setLastUpdated(new Date());
@@ -30,8 +32,10 @@ export const DashboardPage = () => {
     };
 
     useEffect(() => {
-        fetchData();
-    }, [companyId]);
+        if (companyCen) {
+            fetchData();
+        }
+    }, [companyCen]);
 
     if (loading) {
         return (
@@ -78,10 +82,10 @@ export const DashboardPage = () => {
                     icon={<CubeIcon className="w-6 h-6" />}
                 />
                 <StatCard
-                    title="Stock Total"
-                    value={dashboard?.totalStockQuantity ?? 0}
+                    title="Valor de Stock"
+                    value={`$${dashboard?.totalStockValue ?? 0}`}
                     accent="emerald"
-                    subtitle="Unidades en todas las bodegas"
+                    subtitle="Valor total estimado"
                     icon={<CircleStackIcon className="w-6 h-6" />}
                 />
                 <StatCard
@@ -97,10 +101,10 @@ export const DashboardPage = () => {
                 />
 
                 <StatCard
-                    title="Total Bodegas"
-                    value={dashboard?.totalWarehouses ?? 0}
-                    accent="emerald"
-                    subtitle="Bodegas registradas"
+                    title="Sin Stock"
+                    value={dashboard?.outOfStockCount ?? 0}
+                    accent="red"
+                    subtitle="Productos agotados"
                     icon={<BuildingStorefrontIcon className="w-6 h-6" />}
                 />
             </div>

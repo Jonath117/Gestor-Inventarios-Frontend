@@ -25,7 +25,7 @@ export const CategoryForm = ({ initialData, onSubmit, onCancel }: Props) => {
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (initialData) {
-            onSubmit({ id: initialData.id, name, description });
+            onSubmit({ categoryCen: initialData.categoryCen, name, description });
         } else {
             onSubmit({ name, description });
         }

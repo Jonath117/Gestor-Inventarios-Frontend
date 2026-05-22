@@ -1,15 +1,20 @@
 export interface IUnit {
-    id: number;
+    unitCen: string;
     name: string;
-    description?: string;
+    abbreviation?: string;
+    isActive: boolean;
 }
 
 export interface IUnitCreate {
     name: string;
-    description?: string;
+    abbreviation?: string;
+}
+
+export interface IUnitUpdate extends IUnitCreate {
+    unitCen: string;
 }
 
 export interface IUnitFormError {
     name?: string;
-    description?: string;
+    abbreviation?: string;
 }

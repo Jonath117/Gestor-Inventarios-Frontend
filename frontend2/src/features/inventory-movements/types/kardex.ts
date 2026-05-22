@@ -1,11 +1,11 @@
 export interface KardexEntry {
-    id: number;
-    date: string;
+    movementCen: string;
     movementType: string;
+    date: string;
+    warehouseCen: string;
+    warehouseName: string;
     quantity: number;
-    previousStock: number;
-    newStock: number;
-    reason: string;
-    reference: string | null;
-    wareHouseName: string;
+    balance: number;
+    source?: string;
+    referenceCen?: string;
 }

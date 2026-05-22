@@ -1,17 +1,20 @@
 export interface StockItem {
-    productId: number;
+    productCen: string;
     sku: string;
     productName: string;
+    warehouseCen: string;
     warehouseName: string;
-    currentStock: number;
-    unitOfMeasure: string;
-    minStockAlert: number;
+    quantity: number;
+    unitName: string;
     lastUpdated: string;
 }
 
 export interface AdjustmentPayload {
-    productId: number;
-    warehouseId: number;
-    quantity: number;
+    warehouseCen: string;
     reason: string;
+    lines: {
+        productCen: string;
+        quantity: number;
+        adjustmentType: string;
+    }[];
 }

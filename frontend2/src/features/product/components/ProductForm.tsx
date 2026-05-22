@@ -8,11 +8,12 @@ import { useToast } from "../../../components/Toast";
 interface Props {
     initialData?: Product | null;
     companyId: number;
+    companyCen: string;
     onSubmit: (data: any) => Promise<void>;
     onCancel: () => void;
 }
 
-export const ProductForm = ({ initialData, companyId, onSubmit, onCancel }: Props) => {
+export const ProductForm = ({ initialData, companyId, companyCen, onSubmit, onCancel }: Props) => {
     const [loading, setLoading] = useState(false);
     const toast = useToast();
 
@@ -23,20 +24,21 @@ export const ProductForm = ({ initialData, companyId, onSubmit, onCancel }: Prop
         sku: "",
         name: "",
         description: "",
-        price: 0,
+        costPrice: 0,
         salePrice: 0,
-        minStockAlert: 1,
-        categoryId: 0,
-        unitId: 0,
-        isActive: true,
+        reorderLevel: 1,
+        categoryCen: "",
+        unitCen: "",
+        stationCode: "",
     });
 
     useEffect(() => {
         const loadCatalogs = async () => {
+            if (!companyCen) return;
             try {
                 setLoading(true);
-                const data = await getCategories(companyId);
-                const data2 = await getUnits(companyId);
+                const data = await getCategories(companyCen, companyId);
+                const data2 = await getUnits(companyCen, companyId);
                 setCategories(data);
                 setUnits(data2);
             } catch (err: any) {
@@ -52,26 +54,23 @@ export const ProductForm = ({ initialData, companyId, onSubmit, onCancel }: Prop
                 sku: initialData.sku,
                 name: initialData.name,
                 description: initialData.description || "",
-                price: initialData.price,
+                costPrice: initialData.costPrice || 0,
                 salePrice: initialData.salePrice,
-                minStockAlert: initialData.minStockAlert,
-                categoryId: initialData.categoryId || 0,
-                unitId: initialData.unitId || 0,
-                isActive: initialData.isActive,
+                reorderLevel: initialData.reorderLevel,
+                categoryCen: initialData.categoryCen || "",
+                unitCen: initialData.unitCen || "",
+                stationCode: initialData.stationCode || "",
             });
         }
-    }, [initialData, companyId]);
+    }, [initialData, companyCen, companyId]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-        const { name, value, type } = e.target;
+        const { name, value } = e.target;
         setForm(prev => ({
             ...prev,
-            // Convertimos a número los campos numéricos
-            [name]: ["price", "salePrice", "minStockAlert", "categoryId", "unitId"].includes(name)
+            [name]: ["costPrice", "salePrice", "reorderLevel"].includes(name)
                 ? Number(value)
-                : type === "checkbox"
-                    ? (e.target as HTMLInputElement).checked
-                    : value
+                : value
         }));
     };
 
@@ -80,8 +79,7 @@ export const ProductForm = ({ initialData, companyId, onSubmit, onCancel }: Prop
         setLoading(true);
         try {
             if (initialData) {
-                // Manda el update añadiendo el ID
-                await onSubmit({ id: initialData.id, ...form } as IProductUpdate);
+                await onSubmit({ productCen: initialData.productCen, ...form } as IProductUpdate);
             } else {
                 await onSubmit(form);
             }
@@ -115,18 +113,18 @@ export const ProductForm = ({ initialData, companyId, onSubmit, onCancel }: Prop
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div>
                         <label className="text-xs text-gray-400 mb-1 block">Categoría *</label>
-                        <select required name="categoryId" value={form.categoryId || ""} onChange={handleChange}
+                        <select required name="categoryCen" value={form.categoryCen || ""} onChange={handleChange}
                             className="w-full bg-[#0f172a] border border-[#374151] text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-indigo-500">
                             <option value="" disabled>Seleccione...</option>
-                            {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                            {categories.map(c => <option key={c.categoryCen} value={c.categoryCen}>{c.name}</option>)}
                         </select>
                     </div>
                     <div>
                         <label className="text-xs text-gray-400 mb-1 block">Unidad de Medida *</label>
-                        <select required name="unitId" value={form.unitId || ""} onChange={handleChange}
+                        <select required name="unitCen" value={form.unitCen || ""} onChange={handleChange}
                             className="w-full bg-[#0f172a] border border-[#374151] text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-indigo-500">
                             <option value="" disabled>Seleccione...</option>
-                            {units.map(u => <option key={u.id} value={u.id}>{u.name}</option>)}
+                            {units.map(u => <option key={u.unitCen} value={u.unitCen}>{u.name}</option>)}
                         </select>
                     </div>
                 </div>
@@ -135,7 +133,7 @@ export const ProductForm = ({ initialData, companyId, onSubmit, onCancel }: Prop
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                     <div>
                         <label className="text-xs text-gray-400 mb-1 block">Costo de Compra (Bs)</label>
-                        <input type="number" step="0.01" min="0" required name="price" value={form.price} onChange={handleChange}
+                        <input type="number" step="0.01" min="0" required name="costPrice" value={form.costPrice} onChange={handleChange}
                             className="w-full bg-[#0f172a] border border-[#374151] text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-indigo-500" />
                     </div>
                     <div>
@@ -144,8 +142,8 @@ export const ProductForm = ({ initialData, companyId, onSubmit, onCancel }: Prop
                             className="w-full bg-[#0f172a] border border-[#374151] text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-indigo-500" />
                     </div>
                     <div>
-                        <label className="text-xs text-gray-400 mb-1 block">Alerta Stock Mínimo *</label>
-                        <input type="number" min="1" required name="minStockAlert" value={form.minStockAlert} onChange={handleChange}
+                        <label className="text-xs text-gray-400 mb-1 block">Nivel de Reorden *</label>
+                        <input type="number" min="1" required name="reorderLevel" value={form.reorderLevel} onChange={handleChange}
                             className="w-full bg-[#0f172a] border border-[#374151] text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-indigo-500" />
                     </div>
                 </div>
@@ -157,11 +155,11 @@ export const ProductForm = ({ initialData, companyId, onSubmit, onCancel }: Prop
                         className="w-full bg-[#0f172a] border border-[#374151] text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-indigo-500 resize-none" />
                 </div>
 
-                {/* Fila 5: Estado */}
-                <div className="flex items-center gap-3">
-                    <input type="checkbox" name="isActive" checked={form.isActive} onChange={handleChange}
-                        className="w-5 h-5 text-indigo-600 bg-gray-700 border-gray-600 rounded focus:ring-indigo-500" />
-                    <label className="text-sm text-gray-400">¿Está activo?</label>
+                {/* Fila 5: Station Code */}
+                <div>
+                    <label className="text-xs text-gray-400 mb-1 block">Código de Estación (Opcional)</label>
+                    <input name="stationCode" value={form.stationCode} onChange={handleChange} placeholder="Ej: ST-01"
+                        className="w-full bg-[#0f172a] border border-[#374151] text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-indigo-500" />
                 </div>
 
                 {/* Botones */}

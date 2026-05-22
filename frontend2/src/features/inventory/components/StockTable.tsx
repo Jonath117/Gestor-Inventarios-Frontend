@@ -21,27 +21,26 @@ export const StockTable = ({ items }: Props) => {
                         <th className="px-5 py-3 text-left">Bodega</th>
                         <th className="px-5 py-3 text-center">Stock</th>
                         <th className="px-5 py-3 text-center">Unidad</th>
-                        <th className="px-5 py-3 text-center">Mín. Alerta</th>
                         <th className="px-5 py-3 text-center">Actualizado</th>
                         <th className="px-5 py-3 text-center">Estado</th>
                     </tr>
                 </thead>
                 <tbody className="divide-y divide-[#111827]]">
                     {items.map((item, i) => {
-                        const isLow = item.currentStock <= item.minStockAlert;
+                        // For now we don't have isLow since minStockAlert is missing in this DTO
+                        const isLow = false; 
                         return (
                             <tr
-                                key={`${item.productId}-${item.warehouseName}-${i}`}
+                                key={`${item.productCen}-${item.warehouseCen}-${i}`}
                                 className="bg-[#111827] hover:bg-[#1a2232] transition-colors"
                             >
                                 <td className="px-5 py-4 text-medium font-mono text-indigo-400">{item.sku}</td>
                                 <td className="px-5 py-4 font-medium text-white">{item.productName}</td>
                                 <td className="px-5 py-4 text-gray-400">{item.warehouseName}</td>
                                 <td className="px-5 py-4 text-center font-semibold text-white">
-                                    {item.currentStock.toFixed(0)}
+                                    {item.quantity.toFixed(0)}
                                 </td>
-                                <td className="px-5 py-3 text-gray-400 text-medium text-center">{item.unitOfMeasure}</td>
-                                <td className="px-5 py-3 text-center text-gray-400">{item.minStockAlert}</td>
+                                <td className="px-5 py-3 text-gray-400 text-medium text-center">{item.unitName}</td>
                                 <td className="px-5 py-3 text-center text-gray-500 text-medium">{fmt(item.lastUpdated)}</td>
                                 <td className="px-5 py-3 text-center">
                                     {isLow ? (

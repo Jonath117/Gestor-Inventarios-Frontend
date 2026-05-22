@@ -1,8 +1,8 @@
 const API_URL = import.meta.env.VITE_API_URL;
 
-export const getDashboard = async (companyId: number) => {
+export const getDashboard = async (companyCen: string, companyId: number) => {
     const response = await fetch(
-        `${API_URL}/inventory/dashboard`,
+        `${API_URL}/inventory/companies/${companyCen}/dashboard`,
         {
             headers: {
                 "x-company-id": companyId.toString(),

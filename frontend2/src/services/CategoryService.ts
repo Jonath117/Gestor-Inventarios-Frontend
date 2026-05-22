@@ -1,7 +1,7 @@
 const API_URL = import.meta.env.VITE_API_URL;
 
-export const getCategories = async (companyId: number) => {
-    const response = await fetch(`${API_URL}/Category`, {
+export const getCategories = async (companyCen: string, companyId: number) => {
+    const response = await fetch(`${API_URL}/inventory/companies/${companyCen}/categories`, {
         headers: {
             "x-company-id": companyId.toString(),
             "Accept": "application/json",
@@ -14,8 +14,8 @@ export const getCategories = async (companyId: number) => {
     return response.json();
 }
 
-export const createCategory = async (companyId: number, data: { name: string, description?: string }) => {
-    const response = await fetch(`${API_URL}/Category`, {
+export const createCategory = async (companyCen: string, companyId: number, data: { name: string, description?: string }) => {
+    const response = await fetch(`${API_URL}/inventory/companies/${companyCen}/categories`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -31,14 +31,14 @@ export const createCategory = async (companyId: number, data: { name: string, de
     return response.json();
 }
 
-export const updateCategory = async (companyId: number, data: { id: number, name: string, description?: string }) => {
-    const response = await fetch(`${API_URL}/Category`, {
-        method: "PATCH",
+export const updateCategory = async (companyCen: string, companyId: number, data: { categoryCen: string, name: string, description?: string }) => {
+    const response = await fetch(`${API_URL}/inventory/companies/${companyCen}/categories/${data.categoryCen}`, {
+        method: "PUT",
         headers: {
             "Content-Type": "application/json",
             "x-company-id": companyId.toString(),
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({ name: data.name, description: data.description }),
     });
 
     if (!response.ok) {

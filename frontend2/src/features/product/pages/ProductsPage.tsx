@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import type { IProductCreate, IProductUpdate, Product } from "../types/product.types";
-import { getProducts, createProduct, editProduct, deactivateProduct, activateProduct } from "../../../services/ProductService";
+import { getProducts, createProduct, editProduct, updateProductStatus } from "../../../services/ProductService";
 
 import { Button } from "../../../components/ButtonComponent";
 import { useToast } from "../../../components/Toast";
@@ -9,7 +9,9 @@ import { ProductForm } from "../components/ProductForm";
 
 
 export const ProductsPage = () => {
-    const currentCompanyId = JSON.parse(localStorage.getItem("activeCompany") || "{}").id;
+    const activeCompany = JSON.parse(localStorage.getItem("activeCompany") || "{}");
+    const currentCompanyId = activeCompany.id;
+    const currentCompanyCen = activeCompany.companyCen;
 
     const [products, setProducts] = useState<Product[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -21,7 +23,7 @@ export const ProductsPage = () => {
     const fetchProducts = async () => {
         try {
             setIsLoading(true);
-            const data = await getProducts(currentCompanyId);
+            const data = await getProducts(currentCompanyCen, currentCompanyId);
             setProducts(data);
         } catch (error: any) {
             toast.error("Error cargando productos", error.message);
@@ -31,8 +33,8 @@ export const ProductsPage = () => {
     };
 
     useEffect(() => {
-        if (currentCompanyId) fetchProducts();
-    }, [currentCompanyId]);
+        if (currentCompanyCen) fetchProducts();
+    }, [currentCompanyCen]);
 
     const handleOpenCreate = () => {
         setProductToEdit(null);
@@ -53,10 +55,10 @@ export const ProductsPage = () => {
     const handleSubmitForm = async (data: any) => {
         try {
             if (productToEdit) {
-                await editProduct(currentCompanyId, data as IProductUpdate);
+                await editProduct(currentCompanyCen, currentCompanyId, data as IProductUpdate);
                 toast.success("Éxito", "Producto actualizado correctamente");
             } else {
-                await createProduct(currentCompanyId, data as IProductCreate);
+                await createProduct(currentCompanyCen, currentCompanyId, data as IProductCreate);
                 toast.success("Éxito", "Producto creado correctamente");
             }
             handleCloseForm();
@@ -66,13 +68,12 @@ export const ProductsPage = () => {
         }
     };
 
-    const handleDeactivate = async (productId: number, productName: string) => {
+    const handleDeactivate = async (productCen: string, productName: string) => {
         const confirmed = await toast.confirm("¿Desactivar producto?", `¿Estás seguro de desactivar "${productName}"?`);
 
         if (confirmed) {
             try {
-                console.log(currentCompanyId);
-                await deactivateProduct(currentCompanyId, productId);
+                await updateProductStatus(currentCompanyCen, currentCompanyId, productCen, "INACTIVE");
                 toast.success("Desactivado", "El producto ha sido dado de baja.");
                 fetchProducts();
             } catch (err: any) {
@@ -81,13 +82,12 @@ export const ProductsPage = () => {
         }
     };
 
-    const handleActivate = async (productId: number, productName: string) => {
+    const handleActivate = async (productCen: string, productName: string) => {
         const confirmed = await toast.confirm("¿Activar producto?", `¿Estás seguro de activar "${productName}"?`);
 
         if (confirmed) {
             try {
-                console.log(currentCompanyId);
-                await activateProduct(currentCompanyId, productId);
+                await updateProductStatus(currentCompanyCen, currentCompanyId, productCen, "ACTIVE");
                 toast.success("Activado", "El producto ha sido activado.");
                 fetchProducts();
             } catch (err: any) {
@@ -115,6 +115,7 @@ export const ProductsPage = () => {
                 <div className="mt-4">
                     <ProductForm
                         companyId={currentCompanyId}
+                        companyCen={currentCompanyCen}
                         initialData={productToEdit}
                         onSubmit={handleSubmitForm}
                         onCancel={handleCloseForm}
@@ -146,17 +147,15 @@ export const ProductsPage = () => {
                                     </tr>
                                 ) : (
                                     products.map(prod => (
-                                        <tr key={prod.id} className="hover:bg-[#1f2937]/50 transition-colors">
+                                        <tr key={prod.productCen} className="hover:bg-[#1f2937]/50 transition-colors">
                                             <td className="p-4 text-md text-gray-400">{prod.sku}</td>
                                             <td className="p-4 font-medium text-gray-100">{prod.name}</td>
                                             <td className="p-4 text-md text-gray-400">{prod.categoryName}</td>
-                                            <td className="p-4 text-md text-right text-gray-400">{prod.price.toFixed(2)} Bs</td>
+                                            <td className="p-4 text-md text-right text-gray-400">{(prod.costPrice ?? 0).toFixed(2)} Bs</td>
                                             <td className="p-4 text-md text-right font-medium text-emerald-400">{prod.salePrice.toFixed(2)} Bs</td>
                                             <td className="p-4 text-center">
-                                                {!prod.isActive ? (
+                                                {prod.status !== "ACTIVE" ? (
                                                     <span className="bg-gray-500/10 text-gray-400 border border-gray-500/20 text-md px-2 py-1 rounded-full">Inactivo</span>
-                                                ) : prod.isSoldOut ? (
-                                                    <span className="bg-rose-500/10 text-rose-400 border border-rose-500/20 text-md px-2 py-1 rounded-full">Agotado</span>
                                                 ) : (
                                                     <span className="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-md px-2 py-1 rounded-full">Disponible</span>
                                                 )}
@@ -176,12 +175,12 @@ export const ProductsPage = () => {
                                                 <span className="text-gray-600">|</span>
 
                                                 <Button
-                                                    variant={prod.isActive ? "danger" : "success"}
+                                                    variant={prod.status === "ACTIVE" ? "danger" : "success"}
                                                     size="sm"
-                                                    onClick={() => prod.isActive ? handleDeactivate(prod.id, prod.name) : handleActivate(prod.id, prod.name)}
+                                                    onClick={() => prod.status === "ACTIVE" ? handleDeactivate(prod.productCen, prod.name) : handleActivate(prod.productCen, prod.name)}
                                                     fullWidth={true}
                                                 >
-                                                    {prod.isActive ? "Desactivar" : "Activar"}
+                                                    {prod.status === "ACTIVE" ? "Desactivar" : "Activar"}
                                                 </Button>
                                             </td>
                                         </tr>

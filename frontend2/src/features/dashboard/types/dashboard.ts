@@ -1,6 +1,6 @@
 export interface DashboardData {
     totalProducts: number;
-    totalStockQuantity: number;
+    totalStockValue: number;
     lowStockAlerts: number;
-    totalWarehouses: number;
+    outOfStockCount: number;
 }

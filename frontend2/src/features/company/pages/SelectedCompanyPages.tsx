@@ -4,7 +4,7 @@ import { getCompanies } from "../../../services/ChooseCompnay";
 import type { Company } from "../types/company";
 
 export const SelectedCompanyPages = () => {
-    const [companies, setCompanies] = useState<Company[]>([]);
+    const [companies, setCompanies] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(true); 
 
     useEffect(() => {

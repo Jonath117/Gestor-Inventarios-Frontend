@@ -2,6 +2,7 @@ import { createContext, useContext, useState, type ReactNode } from "react";
 
 interface Company {
   id: number;
+  companyCen: string;
   name: string;
 }
 

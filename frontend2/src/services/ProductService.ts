@@ -2,8 +2,8 @@ import type { IProductCreate, IProductUpdate } from "../features/product/types/p
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-export const getProducts = async (companyId: number) => {
-    const response = await fetch(`${API_URL}/Product`, {
+export const getProducts = async (companyCen: string, companyId: number) => {
+    const response = await fetch(`${API_URL}/inventory/companies/${companyCen}/products`, {
         headers: {
             "x-company-id": companyId.toString(),
             "Accept": "application/json",
@@ -16,8 +16,8 @@ export const getProducts = async (companyId: number) => {
     return response.json();
 }
 
-export const createProduct = async (companyId: number, productData: IProductCreate) => {
-    const response = await fetch(`${API_URL}/Product`, {
+export const createProduct = async (companyCen: string, companyId: number, productData: IProductCreate) => {
+    const response = await fetch(`${API_URL}/inventory/companies/${companyCen}/products`, {
         method: "POST",
         headers: {
             "x-company-id": companyId.toString(),
@@ -34,8 +34,8 @@ export const createProduct = async (companyId: number, productData: IProductCrea
     return response.json();
 }
 
-export const editProduct = async (companyId: number, productData: IProductUpdate) => {
-    const response = await fetch(`${API_URL}/Product/${productData.id}`, {
+export const editProduct = async (companyCen: string, companyId: number, productData: IProductUpdate) => {
+    const response = await fetch(`${API_URL}/inventory/companies/${companyCen}/products/${productData.productCen}`, {
         method: "PUT",
         headers: {
             "x-company-id": companyId.toString(),
@@ -51,13 +51,15 @@ export const editProduct = async (companyId: number, productData: IProductUpdate
     return response.json();
 }
 
-export const deactivateProduct = async (companyId: number, productId: number) => {
-    const response = await fetch(`${API_URL}/Product/${productId}/deactivate`, {
+export const updateProductStatus = async (companyCen: string, companyId: number, productCen: string, status: string) => {
+    const response = await fetch(`${API_URL}/inventory/companies/${companyCen}/products/${productCen}/status`, {
         method: "PATCH",
         headers: {
             "x-company-id": companyId.toString(),
+            "Content-Type": "application/json",
             "Accept": "application/json",
         },
+        body: JSON.stringify({ status }),
     });
 
     if (!response.ok) {
@@ -67,9 +69,9 @@ export const deactivateProduct = async (companyId: number, productId: number) =>
     return true;
 }
 
-export const activateProduct = async (companyId: number, productId: number) => {
-    const response = await fetch(`${API_URL}/Product/${productId}/activate`, {
-        method: "PATCH",
+export const getSellableProducts = async (companyCen: string, companyId: number, params: any = {}) => {
+    const queryParams = new URLSearchParams(params).toString();
+    const response = await fetch(`${API_URL}/inventory/companies/${companyCen}/sellable-products?${queryParams}`, {
         headers: {
             "x-company-id": companyId.toString(),
             "Accept": "application/json",
@@ -77,8 +79,7 @@ export const activateProduct = async (companyId: number, productId: number) => {
     });
 
     if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Error en el servidor");
+        throw new Error("Error al obtener los productos vendibles");
     }
-    return true;
+    return response.json();
 }

@@ -1,14 +1,14 @@
 const API_URL = import.meta.env.VITE_API_URL;
 
-export const getProductandWarehouses = async (companyId: number) => {
+export const getProductandWarehouses = async (companyCen: string, companyId: number) => {
     const [productsResponse, warehousesResponse] = await Promise.all([
-        fetch(`${API_URL}/LookUp/lookup-products`, {
+        fetch(`${API_URL}/inventory/companies/${companyCen}/products`, {
             headers: {
                 "x-company-id": companyId.toString(),
                 "Accept": "application/json",
             },
         }),
-        fetch(`${API_URL}/LookUp/lookup-warehouses`, {
+        fetch(`${API_URL}/inventory/companies/${companyCen}/warehouses`, {
             headers: {
                 "x-company-id": companyId.toString(),
                 "Accept": "application/json",

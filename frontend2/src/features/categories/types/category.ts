@@ -1,7 +1,8 @@
 export interface Category{
-    id: number;
+    categoryCen: string;
     name: string;
     description? : string;
+    isActive: boolean;
 }
 
 export interface CategoryCreate{
@@ -10,5 +11,5 @@ export interface CategoryCreate{
 }
 
 export interface CategoryUpdate extends CategoryCreate{
-    id: number;
+    categoryCen: string;
 }

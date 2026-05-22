@@ -1,14 +1,13 @@
 import { useState, useEffect } from "react";
-import { registerMovement } from "../../../services/MovementService";
+import { createDocument } from "../../../services/MovementService";
 import { getProductandWarehouses } from "../../../services/DropDown";
-import type { MovementFormData } from "../types";
 import { Button } from "../../../components/ButtonComponent";
 import { useToast } from "../../../components/Toast";
 
 export const MovementForm = () => {
-    const [form, setForm] = useState<MovementFormData>({
-        productId: "",
-        warehouseId: "",
+    const [form, setForm] = useState({
+        productCen: "",
+        warehouseCen: "",
         movementType: "IN",
         quantity: "",
         reference: "",
@@ -19,8 +18,11 @@ export const MovementForm = () => {
     const [warehouses, setWarehouses] = useState<any[]>([]);
 
     const [loading, setLoading] = useState(false);
-    const [message, setMessage] = useState<{ text: string; type: "success" | "error" } | null>(null);
     const toast = useToast();
+
+    const activeCompany = JSON.parse(localStorage.getItem("activeCompany") || "{}");
+    const companyId = activeCompany.id;
+    const companyCen = activeCompany.companyCen;
 
     const blockInvalidChars = (e: React.KeyboardEvent) => {
         if (["e", "E", ".", ","].includes(e.key)) {
@@ -30,10 +32,9 @@ export const MovementForm = () => {
 
     useEffect(() => {
         const loadCatalogs = async () => {
-            const companyId = JSON.parse(localStorage.getItem("activeCompany") || "{}").id;
-            if (companyId) {
+            if (companyCen) {
                 try {
-                    const data = await getProductandWarehouses(companyId);
+                    const data = await getProductandWarehouses(companyCen, companyId);
                     setProducts(data.products);
                     setWarehouses(data.warehouses);
                 } catch (error: any) {
@@ -42,68 +43,60 @@ export const MovementForm = () => {
             }
         };
         loadCatalogs();
-    }, []);
+    }, [companyCen]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
-
-        setForm(prev => {
-            // Manejo limpio para los números y Selects
-            if (name === "quantity" || name === "productId" || name === "warehouseId") {
-                return {
-                    ...prev,
-                    [name]: value === "" ? "" : Number(value)
-                };
-            }
-
-            return { ...prev, [name]: value };
-        });
+        setForm(prev => ({ ...prev, [name]: value }));
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        // Validación extra de seguridad en el frontend
         if (Number(form.quantity) <= 0) {
             toast.error("Error al registrar el movimiento", "La cantidad debe ser mayor a 0");
             return;
         }
 
         setLoading(true);
-        setMessage(null);
 
         try {
-            const companyId = JSON.parse(localStorage.getItem("activeCompany") || "{}").id;
+            const documentType = form.movementType === "IN" ? "PURCHASE" : "SALE";
+            
+            const documentData = {
+                warehouseCen: form.warehouseCen,
+                documentType: documentType,
+                source: "FRONTEND_MANUAL",
+                referenceCen: form.reference,
+                reason: form.reason,
+                items: [
+                    {
+                        productCen: form.productCen,
+                        quantity: Number(form.quantity)
+                    }
+                ]
+            };
 
-            await registerMovement(companyId, {
-                productId: form.productId as number,
-                warehouseId: form.warehouseId as number,
-                movementType: form.movementType as "IN" | "OUT",
-                quantity: form.quantity as number,
-                reference: form.reference,
-                reason: form.reason
-            });
+            await createDocument(companyCen, companyId, documentData);
 
             toast.success("Movimiento registrado con éxito", "El movimiento se ha registrado correctamente.");
 
             setForm(prev => ({
                 ...prev,
-                productId: "",
+                productCen: "",
                 quantity: "",
                 reference: "",
                 reason: ""
             }));
 
         } catch (error: any) {
-            const errorMessage = error.message || "Error al registrar el movimiento. Verifica los datos.";
-            toast.error("Error al registrar el movimiento", errorMessage);
+            toast.error("Error al registrar el movimiento", error.message);
         } finally {
             setLoading(false);
         }
     };
 
     const isIncome = form.movementType === "IN";
-    const activeColor = isIncome ? "bg-emerald-600 hover:bg-emerald-500" : "bg-rose-600 hover:bg-rose-500";
     const tabActiveIncome = isIncome ? "bg-emerald-600/20 text-emerald-400 border-emerald-500/50" : "bg-transparent text-gray-400 border-transparent hover:text-gray-300";
     const tabActiveOutcome = !isIncome ? "bg-rose-600/20 text-rose-400 border-rose-500/50" : "bg-transparent text-gray-400 border-transparent hover:text-gray-300";
 
@@ -113,20 +106,14 @@ export const MovementForm = () => {
             <div className="flex border-b border-[#1f2937] bg-[#0f172a]/50">
                 <button
                     type="button"
-                    onClick={() => {
-                        setForm(prev => ({ ...prev, movementType: "IN" }));
-                        setMessage(null);
-                    }}
+                    onClick={() => setForm(prev => ({ ...prev, movementType: "IN" }))}
                     className={`flex-1 py-4 text-medium sm:text-medium font-semibold border-b-2 transition-colors ${tabActiveIncome}`}
                 >
                     Entrada (Compra)
                 </button>
                 <button
                     type="button"
-                    onClick={() => {
-                        setForm(prev => ({ ...prev, movementType: "OUT" }));
-                        setMessage(null);
-                    }}
+                    onClick={() => setForm(prev => ({ ...prev, movementType: "OUT" }))}
                     className={`flex-1 py-4 text-medium sm:text-medium font-semibold border-b-2 transition-colors ${tabActiveOutcome}`}
                 >
                     Salida (Venta/Baja)
@@ -137,19 +124,19 @@ export const MovementForm = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div>
                         <label className="text-xs text-gray-400 mb-1 block">Producto</label>
-                        <select name="productId" value={form.productId} onChange={handleChange} required
+                        <select name="productCen" value={form.productCen} onChange={handleChange} required
                             className="w-full bg-[#0f172a] border border-[#374151] text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-indigo-500 transition-colors">
                             <option value="" disabled>Seleccione un producto...</option>
-                            {products.map(p => <option key={p.id} value={p.id}>{p.sku} - {p.name}</option>)}
+                            {products.map(p => <option key={p.productCen} value={p.productCen}>{p.sku} - {p.name}</option>)}
                         </select>
                     </div>
 
                     <div>
                         <label className="text-xs text-gray-400 mb-1 block">Bodega</label>
-                        <select name="warehouseId" value={form.warehouseId} onChange={handleChange} required
+                        <select name="warehouseCen" value={form.warehouseCen} onChange={handleChange} required
                             className="w-full bg-[#0f172a] border border-[#374151] text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-indigo-500 transition-colors">
                             <option value="" disabled>Seleccione bodega...</option>
-                            {warehouses.map(w => <option key={w.id} value={w.id}>{w.name}</option>)}
+                            {warehouses.map(w => <option key={w.warehouseCen} value={w.warehouseCen}>{w.name}</option>)}
                         </select>
                     </div>
                 </div>
@@ -177,13 +164,6 @@ export const MovementForm = () => {
                         placeholder={isIncome ? "Ej: Compra mensual a distribuidor" : "Ej: Venta al cliente final o merma"}
                         className="w-full bg-[#0f172a] border border-[#374151] text-white rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-indigo-500 transition-colors resize-none" />
                 </div>
-
-                {/* Mensajes de Alerta */}
-                {message && (
-                    <div className={`p-3 rounded-lg text-sm ${message.type === 'success' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' : 'bg-rose-500/10 text-rose-400 border border-rose-500/20'}`}>
-                        {message.text}
-                    </div>
-                )}
 
                 {/* Botón Submit */}
                 <Button
