@@ -9,8 +9,10 @@ import {
   Squares2X2Icon, // Dashboard
   ArchiveBoxIcon,
   ClipboardIcon,
-  NumberedListIcon
-
+  NumberedListIcon,
+  ShoppingCartIcon,
+  FireIcon,
+  ChartBarIcon
 } from "@heroicons/react/24/outline";
 import { useCompany } from "../../features/company/pages/CompanyContext.tsx";
 
@@ -19,6 +21,9 @@ import { useCompany } from "../../features/company/pages/CompanyContext.tsx";
 const navigation = [
   { name: "Inicio", href: "/", icon: HomeIcon },
   { name: "Dashboard", href: "/dashboard", icon: Squares2X2Icon },
+  { name: "Ventas (POS)", href: "/sales", icon: ShoppingCartIcon },
+  { name: "Monitor Cocina (KDS)", href: "/kds", icon: FireIcon },
+  { name: "Reporte Ventas", href: "/sales-report", icon: ChartBarIcon },
   { name: "Inventario", href: "/inventory", icon: ArchiveBoxIcon },
   { name: "Productos", href: "/products", icon: ClipboardIcon },
   { name: "Movimientos", href: "/in-out", icon: DocumentDuplicateIcon },

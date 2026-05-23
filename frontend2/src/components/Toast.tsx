@@ -80,7 +80,7 @@ const ToastItem = ({ toast, onRemove }: { toast: Toast; onRemove: (id: number) =
         <div
             className={`
                 relative flex items-start gap-3 
-                w-80 
+                w-200 
                 rounded-xl
                 bg-[#111827] border ${s.border}
                 px-4 py-3.5 shadow-2xl shadow-black/40

@@ -11,6 +11,9 @@ import { MovementPage } from './features/in-out/pages/MovementPage.tsx';
 import { CategoriesPage } from './features/categories/pages/categoriesPage.tsx';
 import { ProductsPage } from './features/product/pages/ProductsPage.tsx';
 import { UnitsPage } from './features/units/pages/UnitsPage.tsx';
+import { SalesPage } from './features/sales/pages/SalesPage.tsx';
+import { KdsPage } from './features/kds/pages/KdsPage.tsx';
+import { SalesDashboardPage } from './features/sales/pages/SalesDashboardPage.tsx';
 
 function App() {
 
@@ -22,6 +25,9 @@ function App() {
             <Route element={<MainLayout />}>
               <Route path="/" element={<SelectedCompanyPages />} />
               <Route path="/dashboard" element={<DashboardPage />} />
+              <Route path="/sales" element={<SalesPage />} />
+              <Route path="/kds" element={<KdsPage />} />
+              <Route path="/sales-report" element={<SalesDashboardPage />} />
               <Route path="/inventory" element={<InventoryPage />} />
               <Route path="/kardex" element={<KardexPage />} />
               <Route path="/in-out" element={<MovementPage />} />
