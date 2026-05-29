@@ -38,7 +38,7 @@ export const StockTable = ({ items }: Props) => {
                                 <td className="px-5 py-4 font-medium text-white">{item.productName}</td>
                                 <td className="px-5 py-4 text-gray-400">{item.warehouseName}</td>
                                 <td className="px-5 py-4 text-center font-semibold text-white">
-                                    {item.quantity.toFixed(0)}
+                                    {item.quantity?.toFixed(0) ?? "0"}
                                 </td>
                                 <td className="px-5 py-3 text-gray-400 text-medium text-center">{item.unitName}</td>
                                 <td className="px-5 py-3 text-center text-gray-500 text-medium">{fmt(item.lastUpdated)}</td>

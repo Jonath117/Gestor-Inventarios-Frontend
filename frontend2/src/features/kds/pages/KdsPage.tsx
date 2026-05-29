@@ -60,7 +60,7 @@ export const KdsPage = () => {
     const readyItems     = items.filter(i => normalize(i.status) === 'ready');
 
     return (
-        <div className="p-6 h-[calc(100vh-100px)] flex flex-col gap-6">
+        <div className="p-6 h-[calc(100vh)] flex flex-col gap-6">
             <h1 className="text-3xl font-bold text-white flex items-center gap-3">
                 <FireIcon className="w-8 h-8 text-orange-500" />
                 Kitchen Display System (KDS)

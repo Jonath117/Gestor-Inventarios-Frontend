@@ -44,7 +44,7 @@ export const SalesDashboardPage = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
                 <StatCard 
                     title="Venta Total (Hoy)" 
-                    value={`$${data?.totalSales.toFixed(2) ?? "0.00"}`} 
+                    value={`Bs ${data?.totalSales.toFixed(2) ?? "0.00"}`} 
                     accent="emerald"
                     subtitle="Ingresos brutos"
                     icon={<CurrencyDollarIcon className="w-6 h-6" />}
@@ -58,7 +58,7 @@ export const SalesDashboardPage = () => {
                 />
                 <StatCard 
                     title="Promedio por Ticket" 
-                    value={`$${data?.averageTicket.toFixed(2) ?? "0.00"}`} 
+                    value={`Bs ${data?.averageTicket.toFixed(2) ?? "0.00"}`} 
                     accent="red"
                     subtitle="Valor medio de consumo"
                     icon={<ChartBarIcon className="w-6 h-6" />}
@@ -66,13 +66,13 @@ export const SalesDashboardPage = () => {
             </div>
             
             {/* Visual feedback of live integration */}
-            <div className="bg-[#111827] border border-[#1f2937] p-6 rounded-2xl">
+            {/* <div className="bg-[#111827] border border-[#1f2937] p-6 rounded-2xl">
                 <h2 className="text-white font-bold mb-4">Estado de Integración</h2>
                 <div className="flex items-center gap-2 text-sm">
                     <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                     <span className="text-gray-400">Conectado a Módulo de Inventario vía HTTP (Descuento de stock en tiempo real activo)</span>
                 </div>
-            </div>
+            </div> */}
         </div>
     );
 };

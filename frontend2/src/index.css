@@ -1,1 +1,11 @@
 @import "tailwindcss";
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none; /* Oculta la barra en Chrome, Safari y Edge */
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;  /* Oculta la barra en Internet Explorer y Edge clásico */
+    scrollbar-width: none;  /* Oculta la barra en Firefox */
+  }
+}

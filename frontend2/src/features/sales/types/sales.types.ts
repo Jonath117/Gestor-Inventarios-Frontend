@@ -55,3 +55,9 @@ export interface DailySalesDashboard {
     ticketsCount: number;
     averageTicket: number;
 }
+
+export interface Waiter{
+    waiterCen: string;
+    name: string;
+    isActive: boolean;
+}

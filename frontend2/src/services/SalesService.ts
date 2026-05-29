@@ -48,7 +48,7 @@ export const getTicketItems = async (companyCen: string, companyId: number, tick
             throw new Error(text.substring(0, 100) + "...");
         }
     }
-    return response.json(); // ✅ was missing
+    return response.json(); 
 };
 
 export const addItemToTicket = async (companyCen: string, companyId: number, ticketCen: string, item: { productCen: string, quantity: number, note?: string }) => {
@@ -154,6 +154,58 @@ export const getWarehouses = async (companyCen: string, companyId: number) => {
     if (!response.ok) {
         const err = await response.json().catch(() => ({}));
         throw new Error(err.error || "Error al obtener almacenes");
+    }
+    return response.json();
+};
+
+export const updateTicketItem = async (companyCen: string, companyId: number, ticketCen: string, ticketItemCen: string, data: { quantity: number, note?: string }) => {
+    const response = await fetch(`${API_URL}/sales/companies/${companyCen}/tickets/${ticketCen}/items/${ticketItemCen}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json", "x-company-id": companyId.toString() },
+        body: JSON.stringify(data)
+    });
+    if (!response.ok) throw new Error("Error al actualizar ítem");
+    return response.json();
+};
+
+export const removeTicketItem = async (companyCen: string, companyId: number, ticketCen: string, ticketItemCen: string) => {
+    const response = await fetch(`${API_URL}/sales/companies/${companyCen}/tickets/${ticketCen}/items/${ticketItemCen}`, {
+        method: "DELETE",
+        headers: { "x-company-id": companyId.toString() }
+    });
+    if (!response.ok) throw new Error("Error al eliminar ítem");
+    return true; 
+};
+
+//    [HttpGet]
+//     public async Task<IActionResult> GetWaiters()
+//     {
+//         var waiters = await _mediator.Send(new GetWaitersQuery(_companyProvider.CompanyId));
+//         return Ok(waiters);
+//     }
+
+// public record GetWaitersQuery(int CompanyId) : IRequest<IEnumerable<WaiterContractResponse>>;
+
+// public class GetWaitersQueryHandler : IRequestHandler<GetWaitersQuery, IEnumerable<WaiterContractResponse>>
+// {
+//     public async Task<IEnumerable<WaiterContractResponse>> Handle(GetWaitersQuery request, CancellationToken cancellationToken)
+//     {
+//         return new List<WaiterContractResponse>
+//         {
+//             new WaiterContractResponse("W-001", "Juan Perez", true),
+//             new WaiterContractResponse("W-002", "Maria Garcia", true),
+//             new WaiterContractResponse("W-003", "Matias Molina", true)
+//         };
+//     }
+// }
+
+export const getWaiters = async (companyCen: string, companyId: number) => {
+    const response = await fetch(`${API_URL}/sales/companies/${companyCen}/waiters`, {
+        headers: { "x-company-id": companyId.toString(), "Accept": "application/json" }
+    });
+    if (!response.ok) {
+        const err = await response.json().catch(() => ({}));
+        throw new Error(err.error || "Error al obtener meseros");
     }
     return response.json();
 };

@@ -126,7 +126,7 @@ export const ProductsPage = () => {
                     <p className="text-gray-400 text-center mt-10">Cargando catálogo...</p>
                 ) : (
                     <div className="overflow-x-auto bg-[#111827] rounded-xl border border-[#1f2937] shadow-lg">
-                        <table className="w-full text-left border-collapse min-w-[800px]">
+                        <table className="w-full text-left border-collapse min-w-200">
                             <thead className="bg-[#1f2937] text-gray-400 uppercase text-xs tracking-wider">
                                 <tr className="border-b border-[#374151]">
                                     <th className="p-4 font-semibold">SKU</th>
