@@ -183,19 +183,18 @@ export const useSalesPage = () => {
         if (!selectedTicket) return;
         const confirmed = await toast.confirm("Procesar Pago", "¿Confirmar pago en efectivo?");
         if (!confirmed) return;
+        
         try {
             setLoading(true);
             await payTicket(companyCen, companyId, selectedTicket.ticketCen, 1);
+            
             toast.success("Éxito", "Ticket pagado y stock descontado");
             setSelectedTicket(null);
             setTicketItems([]);
             fetchTickets();
+            
         } catch (error: any) {
-            let message = error.message;
-            if (message.includes("System.InvalidOperationException:")) {
-                message = message.replace("System.InvalidOperationException:", "").trim();
-            }
-            toast.error("Error en pago", message);
+            toast.error("Atencion", error.message); 
         } finally {
             setLoading(false);
         }
