@@ -1,30 +1,21 @@
 const API_URL = import.meta.env.VITE_API_URL;
 
+import { createHeaders } from "./utils";
+import { handleResponse } from "./utils";
+
 export const getProductandWarehouses = async (companyCen: string, companyId: number) => {
     const [productsResponse, warehousesResponse] = await Promise.all([
         fetch(`${API_URL}/inventory/companies/${companyCen}/products`, {
-            headers: {
-                "x-company-id": companyId.toString(),
-                "Accept": "application/json",
-            },
+            headers: createHeaders(companyId),
         }),
         fetch(`${API_URL}/inventory/companies/${companyCen}/warehouses`, {
-            headers: {
-                "x-company-id": companyId.toString(),
-                "Accept": "application/json",
-            },
+            headers: createHeaders(companyId),
         }),
     ]);
-
-    if (!productsResponse.ok) {
-        throw new Error("Error al obtener los productos");
-    }
-    if (!warehousesResponse.ok) {
-        throw new Error("Error al obtener las bodegas");
+    
+    return {
+        products: await handleResponse(productsResponse, "Error al obtener los productos"),
+        warehouses: await handleResponse(warehousesResponse, "Error al obtener los almacenes"),
     }
 
-    const products = await productsResponse.json();
-    const warehouses = await warehousesResponse.json();
-
-    return { products, warehouses };
 }

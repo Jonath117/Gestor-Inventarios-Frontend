@@ -1,3 +1,6 @@
+import { createHeaders } from "./utils";
+import { handleResponse } from "./utils";
+
 const API_URL = import.meta.env.VITE_API_URL;
 
 export const getKardex = async (companyCen: string, companyId: number, productCen: string, params: { warehouseCen?: string, from?: string, to?: string } = {}) => {
@@ -9,14 +12,8 @@ export const getKardex = async (companyCen: string, companyId: number, productCe
   const url = `${API_URL}/inventory/companies/${companyCen}/products/${productCen}/kardex?${queryParams.toString()}`;
 
   const response = await fetch(url, {
-    headers: {
-      "x-company-id": companyId.toString(),
-      "Accept": "application/json",
-    },
+    headers: createHeaders(companyId),
   });
 
-  if (!response.ok) {
-    throw new Error("Error al obtener el kardex del producto");
-  }
-  return response.json();
+  return handleResponse(response, "Error al obtener el kardex");
 }

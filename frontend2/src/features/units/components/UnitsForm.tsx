@@ -11,7 +11,7 @@ interface Props {
 export const UnitsForm = ({ initialData, onSubmit, onCancel }: Props) => {
     const [formData, setFormData] = useState<IUnitCreate>({
         name: "",
-        description: "",
+        abbreviation: "",
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -23,17 +23,17 @@ export const UnitsForm = ({ initialData, onSubmit, onCancel }: Props) => {
         if (initialData) {
             setFormData({
                 name: initialData.name,
-                description: initialData.description || "",
+                abbreviation: initialData.abbreviation || "",
             });
         } else {
-            setFormData({ name: "", description: "" });
+            setFormData({ name: "", abbreviation: "" });
         }
     }, [initialData]);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (initialData) {
-            onSubmit({ id: initialData.id, ...formData });
+            onSubmit({ ...initialData, ...formData });
         } else {
             onSubmit(formData);
         }
@@ -60,8 +60,8 @@ export const UnitsForm = ({ initialData, onSubmit, onCancel }: Props) => {
             <div className="mb-6">
                 <label className="block text-sm font-medium text-gray-300 mb-1">Descripción (Opcional)</label>
                 <input
-                    name="description"
-                    value={formData.description}
+                    name="abbreviation"
+                    value={formData.abbreviation}
                     onChange={handleChange}
                     className="border p-2.5 w-full rounded-lg bg-[#0f172a] border-[#374151] text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
                     placeholder="Detalles adicionales..."

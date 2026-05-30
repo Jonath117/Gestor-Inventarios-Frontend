@@ -1,18 +1,15 @@
 const API_URL = import.meta.env.VITE_API_URL;
 
+import { createHeaders } from "./utils";
+import { handleResponse } from "./utils";
+
 export const getDashboard = async (companyCen: string, companyId: number) => {
     const response = await fetch(
         `${API_URL}/inventory/companies/${companyCen}/dashboard`,
         {
-            headers: {
-                "x-company-id": companyId.toString(),
-            },
+            headers: createHeaders(companyId),
         }
     );
 
-    if (!response.ok) {
-        throw new Error("Error al obtener el dashboard");
-    }
-
-    return response.json();
+    return handleResponse(response, "Error al obtener los datos del dashboard");
 }

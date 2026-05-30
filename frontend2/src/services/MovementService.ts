@@ -1,20 +1,16 @@
+import { createHeaders } from "./utils";
+import { handleResponse } from "./utils";
+
 const API_URL = import.meta.env.VITE_API_URL;
 
 export const createDocument = async (companyCen: string, companyId: number, documentData: any) => {
     const response = await fetch(`${API_URL}/inventory/companies/${companyCen}/documents`, {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "x-company-id": companyId.toString(),
-        },
+        headers: createHeaders(companyId, true),
         body: JSON.stringify(documentData),
     });
 
-    if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Error en el servidor");
-    }
-    return response.json();
+    return handleResponse(response, "Error al crear el documento");
 }
 
 export const getDocuments = async (companyCen: string, companyId: number, params: { documentType?: string, from?: string, to?: string } = {}) => {
@@ -24,14 +20,8 @@ export const getDocuments = async (companyCen: string, companyId: number, params
     if (params.to) queryParams.append("to", params.to);
 
     const response = await fetch(`${API_URL}/inventory/companies/${companyCen}/documents?${queryParams.toString()}`, {
-        headers: {
-            "x-company-id": companyId.toString(),
-            "Accept": "application/json",
-        },
+        headers: createHeaders(companyId),
     });
 
-    if (!response.ok) {
-        throw new Error("Error al obtener los documentos");
-    }
-    return response.json();
+    return handleResponse(response, "Error al obtener los documentos");
 }

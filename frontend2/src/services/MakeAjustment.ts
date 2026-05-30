@@ -1,3 +1,6 @@
+import { createHeaders } from "./utils";
+import { handleResponse } from "./utils";
+
 const API_URL = import.meta.env.VITE_API_URL;
 
 export const makeAdjustment = async (companyCen: string, companyId: number, adjustmentData: {
@@ -11,16 +14,9 @@ export const makeAdjustment = async (companyCen: string, companyId: number, adju
 }) => {
     const response = await fetch(`${API_URL}/inventory/companies/${companyCen}/stock/adjustments`, {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "x-company-id": companyId.toString(),
-        },
+        headers: createHeaders(companyId, true),
         body: JSON.stringify(adjustmentData),
     });
 
-    if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Error al registrar el ajuste de stock");
-    }
-    return response.json();
+    return handleResponse(response, "Error al realizar el ajuste de stock");
 }
