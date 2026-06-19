@@ -48,7 +48,8 @@ const navigationGroups = [
 
   {title: "Compras",
     items: [
-
+      { name: "Ordenes de Compra", href: "/purchases", icon: ShoppingCartIcon },
+      
     ]
   }
 ];

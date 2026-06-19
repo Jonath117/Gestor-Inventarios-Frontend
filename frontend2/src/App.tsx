@@ -14,6 +14,7 @@ import { UnitsPage } from './features/units/pages/UnitsPage.tsx';
 import { SalesPage } from './features/sales/pages/SalesPage.tsx';
 import { KdsPage } from './features/kds/pages/KdsPage.tsx';
 import { SalesDashboardPage } from './features/sales/pages/SalesDashboardPage.tsx';
+import { PurchasesPage } from './features/purchases/pages/PurchasesPage.tsx';
 
 function App() {
 
@@ -34,6 +35,7 @@ function App() {
               <Route path="/categories" element={<CategoriesPage />} />
               <Route path="/products" element={<ProductsPage />} />
               <Route path="/units" element={<UnitsPage />} />
+              <Route path="/purchases" element={<PurchasesPage />} />
             </Route>
           </Routes>
         </ToastProvider>
