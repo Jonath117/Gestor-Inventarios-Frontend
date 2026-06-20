@@ -100,6 +100,22 @@ export const removeTicketItem = async (companyCen: string, companyId: number, ti
     return handleResponse(response, "Error al eliminar ítem");
 };
 
+export const resendTicketItem = async (companyCen: string, companyId: number, ticketCen: string, ticketItemCen: string) => {
+    const response = await fetch(`${API_URL}/sales/companies/${companyCen}/tickets/${ticketCen}/items/${ticketItemCen}/resend`, {
+        method: "POST",
+        headers: createHeaders(companyId)
+    });
+    return handleResponse(response, "Error al reenviar ítem");
+};
+
+export const printTicket = async (companyCen: string, companyId: number, ticketCen: string) => {
+    const response = await fetch(`${API_URL}/sales/companies/${companyCen}/tickets/${ticketCen}/print`, {
+        method: "GET",
+        headers: createHeaders(companyId)
+    });
+    return handleResponse(response, "Error al imprimir ticket");
+};
+
 
 // Catalogo, Almacen y Meseros
 
